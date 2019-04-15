@@ -4,157 +4,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>A Tail of a City Game Design Document</title>
-    <style>
-        img {
-            padding: 20px;
-        }
-    </style>
+    <title>The Tail of a City</title>
+
+    <script type="text/javascript" src="js/lib/phaser.js"></script>
+    <script type="text/javascript" src="js/scenes/loadscene.js"></script>
+    <script type="text/javascript" src="js/scenes/menuscene.js"></script>
+    <script type="text/javascript" src="js/scenes/levelscene.js"></script>
+    <script type="text/javascript" src="js/scenes/controlscene.js"></script>
+    <script type="text/javascript" src="js/scenes/helpscene.js"></script>
+
 </head>
 <body>
-    <h1 align="center">
-        The Tail of a City<br>
-        Game Design Document
-    </h1>
-    
-    <h2 align="center"> 
-        by Daniel Garcia, Seyun Yoon, Raymond Zheng
-    </h2>
-    <div style="text-align: center">
-            <img src="./images/logo1.png" style="max-width: 25%">
-    </div>
-    
-    
-    <h3> INTRODUCTION </h3>
-    <p>
-        This document describes a game called "The Tail of a City", a 2D top-down game in which the user controls and moves the character through keyboard inputs. The game will use sprite-based animations, tiled backgrounds, collision detection, AI, and more common 2D game techniques.
-    </p>
-    <br>
-
-    <h3> TECHNOLOGY </h3>
-    <p>
-        This game will be created using the Phaser 3 Framework, and artwork will be created using Adobe Photoshop.
-    </p>
-    <br>
-    
-    <h3>BACK STORY</h3>
-    <p>
-        It is the year 2579, and New York still remains to be the most populated city within the east coast. However, with a massive population of 10 million inhabitants, the city is becoming more and more hazardous to live in, a problem that has been building up during the last few decades. Pollution is increasing due to the growing number of Americans that are constantly polluting the roads and sidewalks, crime is beginning to incite fear on the citizens that have to go home every night after work, and many people are becoming homeless as a result of the city's poverty rates. Realizing the magnitude of the underlying issues, a group of dogs, known as the "Key-Nines", have all begun to work together as a unit to ensure the safety and cleanliness of the city.
-    </p>
-    <br>
-    
-    <h3>OBJECTIVE</h3>
-    <p>
-        The main objective of this game is to increase the user's reputation level by doing tasks and side quests to make sure the city stays safe and clean. Reputation is gained by doing main and side quests that promote good deeds, but reputation can also be lost if the user performs bad deeds publicly. Actions such as barking, picking up items, and attacking are some of the things that can be done to promote or lose reputation.
-    </p>
-    <br>
-    
-    <h3>GAMEPLAY</h3>
-    <p>
-        The character played will be a dog that the user chooses manually in the character selection screen. The user can choose to start at level 1, or choose a higher level once unlocked. Once the level begins, the user starts with a reputation level of 0 and spawns somewhere in the map. Surrounded throughout the map will be NPC humans and dogs that offer different quests that the user can choose to do. However, these quests will vary on whether the dog's reputation increases or decreases, and it is up to the user to determine which path they would like to take. (Good vs. Evil dog)
-    </p>
-    <p>
-        The user controls the character using the W, A, S, and D keys, and will be able to perform other actions such as barking, attacking, or picking up items in order to do these quests. Scattered throughout the map will also be NPCs in the form of humans and dogs, where they will also be allowed to move, see in a general direction, and perform actions like running and attacking. If an action by the user is performed in which they are seen by the humans and other dogs, the user’s reputation increases or decreases based on whether or not the NPCs are bad, and based on whether the action the user performs was towards a good or bad NPC. The NPCs will also be able to recognize whether the dog is good or bad based on what it sees in its general direction when the dog performs an action.
-    </p>
-    <p>
-        As reputation increases, the quests that the user will be able to do will increase in difficulty and length, such as having to perform more actions and having to deal with more enemies. The level ends when every NPC in the level recognizes the character, and the user’s reputation is carried towards the next level, where more quests, NPCs, and obstacles will be delivered. However, if the user dies before the level ends (this can occur as a result of the NPCs attacking the user based on their reputation), the user must restart the level starting at a reputation level of 0 and must work their way throughout the level to get back their original reputation level.
-    </p>
-    <br>
-    
-    <h3>CONTROLS</h3>
-    <p>
-        This game will use the mouse to navigate through the screens, and will be played using a keyboard. Listed below are the controls of the game:
-    </p>
-    <ul>
-        <li><strong>A</strong> - Move Left</li>
-        <li><strong>D</strong> - Move Right</li>
-        <li><strong>W</strong> - Move Up</li>
-        <li><strong>S</strong> - Move Down</li>
-        <li><strong>J</strong> - Attack</li>
-        <li><strong>K</strong> - Pick Up Item</li>
-        <li><strong>L</strong> - Bark</li>
-        <li><strong>Esc</strong> - Pause</li>
-        <li><strong>Shift</strong> - Run</li>
-    </ul>
-    <br>
-    
-    <h3>GRAPHICAL USER INTERFACE</h3>
-    <ul>
-        <li><strong>Splash Screen</strong> - The splash screen will show the game’s logo and a loading bar to the menu.</li>
-        <img src="./images/splashscreen.jpg" align="center" style="max-width: 25%">
-        <li><strong>Main Menu</strong> - The main menu will present five different options.</li>
-        <ul>
-            <li><strong>Character Select</strong> - The player chooses a character to play</li>
-            <li><strong>Level Select</strong> - The player goes to the level selection screen.</li>
-            <li><strong>Controls</strong> - The player goes to the controls screen.</li>
-            <li><strong>Help</strong> - The player goes to the help screen.</li>
-            <li><strong>Start</strong> - The player starts the game at level 1 OR resumes the current level they're playing at.</li>
-        </ul>
-        <img src="./images/mainmenu.jpg" align="center" style="max-width: 25%">
-        <li><strong>Level Selection Screen</strong> - The level selection screen allows the player to select a level to play.</li>
-        <img src="./images/levelselection.jpg" align="center" style="max-width: 25%">
-        <li><strong>Controls Screen</strong> - Displays the controls for the game.</li>
-        <img src="./images/controls.jpg" align="center" style="max-width: 25%">
-        <li><strong>Help Screen</strong> - Explains the backstory for the game and identify the developers of the game.</li>
-        <img src="./images/help.jpg" align="center" style="max-width: 25%">
-        <li><strong>In-Game Screen</strong> - Player can press “Escape” to pause the game.</li>
-        <li><strong>In-Game GUI</strong> - The camera is centered on the main character. In the top left will be the reputation meter. On the right hand side will be quests that the character is currently performing. Above the character will be a health bar. NPCs with quests will have triangles above them.</li>
-        <img src="./images/in-game.jpg" align="center" style="max-width: 25%">
-    </ul>
-    <br>
-
-    <h3>ARTWORK</h3>
-    <p>
-        All sprites and other artwork in the game will be original. The following needs to be created:
-    </p>
-    <ul>
-        <li><strong>Dogs</strong> - There will be many different dogs. Each dog will have animations for:</li>
-        <ul>
-            <li>Walk Up</li>
-            <li>Walk Down</li>
-            <li>Walk Left/Right (Mirrored)</li>
-            <li>Run Up</li>
-            <li>Run Down</li>
-            <li>Run Left/Right (Mirrored)</li>
-            <li>Attack Up</li>
-            <li>Attack Down</li>
-            <li>Attack Left/Right (Mirrored)</li>
-            <li>Bark Up</li>
-            <li>Bark Down</li>
-            <li>Bark Left/Right (Mirrored)</li>
-        </ul>
-        <li><strong>Tiles</strong> - Terrain that characters can and cannot pass through. </li>
-        <li><strong>Quest Indicators</strong> - Blue and orange triangles</li>
-        <li><strong>Reputation Meter</strong></li>
-        <li><strong>Health Bar</strong></li>
-        <li><strong>Items</strong></li>
-    </ul>
-    <br>
-    
-    <h3>SOUND EFFECTS</h3>
-    <p>
-        All sound effects will be original. Sounds must be made to coincide with each of the following events:
-    </p>
-    <ul>
-        <li><strong>Walking</strong></li>
-        <li><strong>Running</strong></li>
-        <li><strong>Barking</strong></li>
-        <li><strong>Attacking</strong></li>
-        <li><strong>Getting Damaged</strong></li>
-        <li><strong>Dying</strong></li>
-        <li><strong>Picking Up Item</strong></li>
-        <li><strong>Accepting Quest</strong></li>
-        <li><strong>Completing Quest</strong></li>
-        <li><strong>Completing a Level</strong></li>
-        <li><strong>Losing a Level</strong></li>
-    </ul>
-    <br>
-    
-    <h3>MUSIC</h3>
-    <p>
-        Game Music will be added when time permits.
-    </p>
-    <br>
-    
+    <script src="js/main.js"></script>
 </body>
 </html>
