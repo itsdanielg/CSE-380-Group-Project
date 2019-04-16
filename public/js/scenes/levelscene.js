@@ -60,7 +60,7 @@ class levelScene extends Phaser.Scene {
             levelOneButton.setScale(SCALE);
         })
         levelOneButton.on("pointerup", () => {
-            // this.scene.start("LEVELONE");
+            this.scene.start("LEVELONE");
         })
 
         levelTwoButton.setInteractive({useHandCursor: true});

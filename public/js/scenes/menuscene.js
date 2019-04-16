@@ -111,8 +111,9 @@ class menuScene extends Phaser.Scene {
             startButton.setScale(SCALE);
         })
         startButton.on("pointerup", () => {
-            var level = this.playLevel(levelIndex)
+            // var level = this.playLevel(levelIndex)
             // this.scene.start(level);
+            this.scene.start("LEVELONE");
         })
 
         levelSelectButton.setInteractive({useHandCursor: true});
