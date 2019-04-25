@@ -71,7 +71,7 @@ class levelScene extends Phaser.Scene {
             levelTwoButton.setScale(SCALE);
         })
         levelTwoButton.on("pointerup", () => {
-            // this.scene.start("LEVELTWO");
+            this.scene.start("LEVELTWO");
         })
 
         levelThreeButton.setInteractive({useHandCursor: true});
@@ -82,7 +82,7 @@ class levelScene extends Phaser.Scene {
             levelThreeButton.setScale(SCALE);
         })
         levelThreeButton.on("pointerup", () => {
-            // this.scene.start("LEVELTHREE");
+            this.scene.start("LEVELTHREE");
         })
 
         levelFourButton.setInteractive({useHandCursor: true});
@@ -93,7 +93,7 @@ class levelScene extends Phaser.Scene {
             levelFourButton.setScale(SCALE);
         })
         levelFourButton.on("pointerup", () => {
-            // this.scene.start("LEVELFOUR");
+            this.scene.start("LEVELFOUR");
         })
 
         levelFiveButton.setInteractive({useHandCursor: true});
@@ -104,7 +104,7 @@ class levelScene extends Phaser.Scene {
             levelFiveButton.setScale(SCALE);
         })
         levelFiveButton.on("pointerup", () => {
-            // this.scene.start("LEVELFIVE");
+            this.scene.start("LEVELFIVE");
         })
 
         levelSixButton.setInteractive({useHandCursor: true});
@@ -115,7 +115,7 @@ class levelScene extends Phaser.Scene {
             levelSixButton.setScale(SCALE);
         })
         levelSixButton.on("pointerup", () => {
-            // this.scene.start("LEVELSIX");
+            this.scene.start("LEVELSIX");
         })
 
         backButton.setInteractive({useHandCursor: true});
