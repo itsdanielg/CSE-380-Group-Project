@@ -5,9 +5,6 @@ class menuScene extends Phaser.Scene {
             key: "MENU"
         });
         this.sceneLoaded = false;
-        this.continueLevel = false;
-        this.dogIndex = 0;
-        this.levelIndex = 0;
         this.allDogs = []
         this.allDogsDescription = []
         this.allLevels = []
@@ -95,10 +92,10 @@ class menuScene extends Phaser.Scene {
             level.setScale(SCALE);
         });
 
-        this.allDogs[this.dogIndex].setVisible(true);
-        this.allDogsDescription[this.dogIndex].setVisible(true);
-        if (this.continueLevel) {
-            this.allLevels[this.levelIndex].setVisible(true);
+        this.allDogs[DOGINDEX].setVisible(true);
+        this.allDogsDescription[DOGINDEX].setVisible(true);
+        if (!progress.NEW) {
+            this.allLevels[progress.CURRENTLEVELINDEX].setVisible(true);
         }
 
         // Pointer Events
@@ -111,9 +108,7 @@ class menuScene extends Phaser.Scene {
             startButton.setScale(SCALE);
         })
         startButton.on("pointerup", () => {
-            // var level = this.playLevel(levelIndex)
-            // this.scene.start(level);
-            this.scene.start("LEVELONE");
+            this.scene.start(progress.CURRENTLEVEL);
         })
 
         levelSelectButton.setInteractive({useHandCursor: true});
@@ -135,13 +130,11 @@ class menuScene extends Phaser.Scene {
             controlsButton.setScale(SCALE);
         })
         controlsButton.on("pointerup", () => {
-            startButton.setVisible(false);
-            levelSelectButton.setVisible(false);
-            controlsButton.setVisible(false);
-            helpButton.setVisible(false);
-            leftButton.setVisible(false);
-            rightButton.setVisible(false);
             this.scene.launch("CONTROLS");
+            this.scene.pause();
+            var controlScene = this.scene.get("CONTROLS");
+            controlScene.sceneCalled = "MENU";
+            this.scene.moveAbove("MENU", "CONTROLS");
         })
 
         helpButton.setInteractive({useHandCursor: true});
@@ -152,13 +145,9 @@ class menuScene extends Phaser.Scene {
             helpButton.setScale(SCALE);
         })
         helpButton.on("pointerup", () => {
-            startButton.setVisible(false);
-            levelSelectButton.setVisible(false);
-            controlsButton.setVisible(false);
-            helpButton.setVisible(false);
-            leftButton.setVisible(false);
-            rightButton.setVisible(false);
             this.scene.launch("HELP");
+            this.scene.pause();
+            this.scene.moveAbove("MENU", "HELP");
         })
 
         leftButton.setInteractive({useHandCursor: true});
@@ -186,39 +175,22 @@ class menuScene extends Phaser.Scene {
     }
 
     changeDog(buttonNum) {
-        this.allDogs[this.dogIndex].setVisible(false);
-        this.allDogsDescription[this.dogIndex].setVisible(false);
+        this.allDogs[DOGINDEX].setVisible(false);
+        this.allDogsDescription[DOGINDEX].setVisible(false);
         if (buttonNum == 0) {
-            this.dogIndex--;
-            if (this.dogIndex < 0) {
-                this.dogIndex = this.allDogs.length - 1;
+            DOGINDEX--;
+            if (DOGINDEX < 0) {
+                DOGINDEX = this.allDogs.length - 1;
             }
         }
         else {
-            this.dogIndex++;
-            if (this.dogIndex >= this.allDogs.length) {
-                this.dogIndex = 0;
+            DOGINDEX++;
+            if (DOGINDEX >= this.allDogs.length) {
+                DOGINDEX = 0;
             }
         }
-        this.allDogs[this.dogIndex].setVisible(true);
-        this.allDogsDescription[this.dogIndex].setVisible(true);
-    }
-    
-    playLevel(levelIndex) {
-        switch (levelIndex) {
-            case 0:
-                return "LEVELONE";
-            case 1:
-                return "LEVELTWO";
-            case 2:
-                return "LEVELTHREE";
-            case 3:
-                return "LEVELFOUR";
-            case 4:
-                return "LEVELFIVE";
-            case 5:
-                return "LEVELSIX";
-        }
+        this.allDogs[DOGINDEX].setVisible(true);
+        this.allDogsDescription[DOGINDEX].setVisible(true);
     }
 
 }
