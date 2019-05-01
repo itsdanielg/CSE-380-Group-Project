@@ -33,7 +33,8 @@ class helpScene extends Phaser.Scene {
             backButton.setScale(SCALE);
         })
         backButton.on("pointerup", () => {
-            this.scene.start("MENU");
+            this.scene.stop();
+            this.scene.resume("MENU");
         })
 
     }
