@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="128" tileheight="128" infinite="0" nextlayerid="10" nextobjectid="140">
+<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="128" tileheight="128" infinite="0" nextlayerid="10" nextobjectid="164">
  <tileset firstgid="1" name="citytileset" tilewidth="128" tileheight="128" tilecount="10" columns="5">
   <image source="../spritesheets/tilespritesheet.png" width="640" height="256"/>
   <tile id="3">
@@ -31,6 +31,15 @@
  </tileset>
  <tileset firstgid="97" name="badguy" tilewidth="128" tileheight="128" tilecount="81" columns="9">
   <image source="../spritesheets/badguyspritesheet.png" width="1152" height="1152"/>
+ </tileset>
+ <tileset firstgid="178" name="pistachio" tilewidth="128" tileheight="128" tilecount="78" columns="6">
+  <image source="../spritesheets/pistachiospritesheet.png" width="768" height="1664"/>
+ </tileset>
+ <tileset firstgid="256" name="spot" tilewidth="128" tileheight="128" tilecount="78" columns="6">
+  <image source="../spritesheets/spotspritesheet.png" width="768" height="1664"/>
+ </tileset>
+ <tileset firstgid="334" name="bear" tilewidth="128" tileheight="128" tilecount="78" columns="6">
+  <image source="../spritesheets/bearspritesheet.png" width="768" height="1664"/>
  </tileset>
  <layer id="1" name="Background" width="30" height="30" locked="1">
   <data encoding="csv">
@@ -152,15 +161,25 @@
   <object id="127" gid="15" x="3152" y="1584" width="64" height="64"/>
   <object id="139" gid="15" x="64" y="120" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="6" name="Dogs" locked="1"/>
- <objectgroup id="8" name="Goods" locked="1">
+ <objectgroup id="6" name="Dogs">
+  <object id="155" gid="178" x="2164" y="324" width="128" height="128"/>
+  <object id="156" gid="178" x="496" y="3552" width="128" height="128"/>
+  <object id="157" gid="178" x="3628" y="2108" width="128" height="128"/>
+  <object id="158" gid="256" x="420" y="916" width="128" height="128"/>
+  <object id="159" gid="256" x="2716" y="3444" width="128" height="128"/>
+  <object id="160" gid="256" x="1620" y="2816" width="128" height="128"/>
+  <object id="161" gid="334" x="1784" y="1584" width="128" height="128"/>
+  <object id="162" gid="334" x="2812" y="2712" width="128" height="128"/>
+  <object id="163" gid="334" x="496" y="1920" width="128" height="128"/>
+ </objectgroup>
+ <objectgroup id="8" name="Goods">
   <object id="129" gid="16" x="880" y="324" width="128" height="128"/>
   <object id="130" gid="16" x="1136" y="1584" width="128" height="128"/>
   <object id="131" gid="16" x="3152" y="2288" width="128" height="128"/>
   <object id="132" gid="16" x="836" y="2904" width="128" height="128"/>
   <object id="133" gid="16" x="2192" y="1620" width="128" height="128"/>
  </objectgroup>
- <objectgroup id="9" name="Bads" locked="1">
+ <objectgroup id="9" name="Bads">
   <object id="134" gid="97" x="3416" y="152" width="128" height="128"/>
   <object id="135" gid="97" x="184" y="2244" width="128" height="128"/>
   <object id="136" gid="97" x="3328" y="2900" width="128" height="128"/>
