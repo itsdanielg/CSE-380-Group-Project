@@ -4,6 +4,7 @@ class controlScene extends Phaser.Scene {
         super({
             key: "CONTROLS"
         });
+        this.sceneCalled = null;
     }
 
     create() {
@@ -33,7 +34,8 @@ class controlScene extends Phaser.Scene {
             backButton.setScale(SCALE);
         })
         backButton.on("pointerup", () => {
-            this.scene.start("MENU");
+            this.scene.stop();
+            this.scene.resume(this.sceneCalled)
         })
 
     }
