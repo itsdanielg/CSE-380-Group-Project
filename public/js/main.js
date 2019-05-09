@@ -2,6 +2,15 @@ var WIDTH = 1280;
 var HEIGHT = 720;
 var SCALE = WIDTH/3000;
 var SCALE_ENLARGE = SCALE + 0.1;
+var DEPTH = {
+    BACKGROUND: 0,
+    COLLISION: 1,
+    ITEM: 2,
+    SPRITE: 3,
+    HEALTHBAR: 4,
+    OVERLAY: 5,
+    OVERLAYTEXT: 6,
+}
 
 var config = {
     type: Phaser.AUTO,
@@ -27,7 +36,9 @@ var config = {
         levelThreeScene,
         levelFourScene,
         levelFiveScene,
-        levelSixScene
+        levelSixScene,
+        completeScene, 
+        failScene
     ]
 };
 

@@ -36,6 +36,8 @@ class loadScene extends Phaser.Scene {
         this.load.image('helpBG', 'assets/background/help.png');
         this.load.image('pauseBG', 'assets/background/pause.png');
         this.load.image('cheatBG', 'assets/background/cheat.png');
+        this.load.image('completeBG', 'assets/background/complete.png');
+        this.load.image('failedBG', 'assets/background/failed.png');
 
         // Buttons
 
@@ -60,6 +62,8 @@ class loadScene extends Phaser.Scene {
         this.load.image('pauseCheats', 'assets/buttons/pausecheats.png');
         this.load.image('cheatSubmit', 'assets/buttons/cheatsubmit.png');
         this.load.image('cheatExit', 'assets/buttons/cheatexit.png');
+        this.load.image('completeContinue', 'assets/buttons/completecontinue.png');
+        this.load.image('failedRetry', 'assets/buttons/failedretry.png');
 
         // Dogs
 
