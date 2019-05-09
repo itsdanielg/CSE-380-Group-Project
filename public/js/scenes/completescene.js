@@ -52,7 +52,7 @@ class completeScene extends Phaser.Scene {
         })
         continueButton.on("pointerup", () => {
             this.scene.stop(progress.CURRENTLEVEL);
-            this.scene.start(this.nextLevel());
+            this.scene.start(nextLevel());
         })
         
         exitButton.setInteractive({useHandCursor: true});    
@@ -64,29 +64,9 @@ class completeScene extends Phaser.Scene {
         })
         exitButton.on("pointerup", () => {
             this.scene.stop(progress.CURRENTLEVEL);
-            progress.CURRENTLEVEL = this.nextLevel();
+            progress.CURRENTLEVEL = nextLevel();
             this.scene.start("MENU");
         })
-
-    }
-
-    nextLevel() {
-
-        if (progress.CURRENTLEVEL == "LEVELONE") {
-            return "LEVELTWO";
-        }
-        else if (progress.CURRENTLEVEL == "LEVELTWO") {
-            return "LEVELTHREE";
-        }
-        else if (progress.CURRENTLEVEL == "LEVELTHREE") {
-            return "LEVELFOUR";
-        }
-        else if (progress.CURRENTLEVEL == "LEVELFOUR") {
-            return "LEVELFIVE";
-        }
-        else {
-            return "LEVELSIX";
-        }
 
     }
 
