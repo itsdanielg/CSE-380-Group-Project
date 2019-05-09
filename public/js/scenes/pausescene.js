@@ -145,4 +145,14 @@ class pauseScene extends Phaser.Scene {
 
     }
 
+    update() {
+
+        if (this.input.keyboard.addKey('ESC').isDown) {
+            this.input.keyboard.removeKey('ESC');
+            this.scene.stop();
+            this.scene.resume(progress.CURRENTLEVEL);
+        }
+        
+    }
+
 }
