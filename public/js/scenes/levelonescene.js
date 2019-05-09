@@ -5,254 +5,271 @@ class levelOneScene extends Phaser.Scene {
             key: "LEVELONE"
         });
         this.player = null;
-        this.dogIndex = 0;
-        this.xVel = VELOCITY;
-        this.yVel = VELOCITY;
-        this.lastKey = 3;
+        this.healthBox = null;
+        this.healthBar = null;
         this.npcs = [];
-        this.attacked = false;
-        this.picked = false;
-        this.barked = false;
-        this.hasItem = false;
+        this.collisionLayer = null;
+        this.items = [];
+        this.quests = [];
+        this.currentReputation = null;
+        this.seconds = 0;
+        this.timerText = "";
+        this.timer = null;
     }
 
     create() {
 
-        // Tilemap
-        var map = this.make.tilemap({ key: 'benchmark2Map' });
-        var sidewalkTile = map.addTilesetImage("sidewalk", 'sidewalk');
-        var streetHoriztonalTile = map.addTilesetImage("street_horiz", 'streetHorizontal');
-        var streetIntersectionTile = map.addTilesetImage("street_intersection", 'streetIntersection');
-        var streetVerticalTile = map.addTilesetImage("street_vertical", 'streetVertical');
-        var buildingTile = map.addTilesetImage("building", 'building');
-        var tileset = [sidewalkTile, streetHoriztonalTile, streetIntersectionTile, streetVerticalTile];
-        var backgroundLayer = map.createStaticLayer("Background", tileset, 0, 0).setDepth(-1);
-        var collisionLayer = map.createStaticLayer("Collision", buildingTile, 0, 0);
+        // Reset Level
 
-        // Collisions
-        collisionLayer.setCollisionByProperty({collides:true});
-        collisionLayer.setCollisionBetween(4, 8);
+        this.npcs.length = 0;
+        this.items.length = 0;
+        this.quests.length = 0;
+
+        // Set progress
+
+        progress.NEW = false;
+        progress.CURRENTLEVEL = "LEVELONE" 
+        progress.CURRENTLEVELINDEX = 0;
+
+        // Set variables (SAME FOR EVERY LEVEL)
+
+        PLAYERHEALTH = 500;
+        HUMANDAMAGE = 50 + Math.ceil(progress.REPUTATION * 0.4);
+        DOGDAMAGE = 20 + Math.ceil(progress.REPUTATION * 0.4);
+
+        // Overlay (THE SAME FOR EVERY LEVEL)
+
+        createLevelOverlay(this);
+
+        // Tilemap (THE SAME FOR EVERY LEVEL EXCEPT FOR MAP KEY)
+        
+        var map = this.make.tilemap({ key: 'levelOneMap' });
+        var tileset = map.addTilesetImage("citytileset", 'cityTiles');
+        map.createStaticLayer("Background", tileset, 0, 0).setDepth(DEPTH.BACKGROUND);
+        this.collisionLayer = map.createStaticLayer("Collision", tileset, 0, 0).setDepth(DEPTH.COLLISION);
+
+        // Objects (THE SAME FOR EVERY LEVEL)
+
+        // Remove a line if that particular item does not exist in this map
+        var bananas = map.createFromObjects('Items', 11, {key: 'items', frame: 0});
+        var cigarettes = map.createFromObjects('Items', 12, {key: 'items', frame: 1});
+        var gumwrappers = map.createFromObjects('Items', 13, {key: 'items', frame: 2});
+        var bottles = map.createFromObjects('Items', 14, {key: 'items', frame: 3});
+        var cans = map.createFromObjects('Items', 15, {key: 'items', frame: 4});
+        var pistachios = map.createFromObjects('Dogs', 178, {key: 'pistachio'});
+        var spots = map.createFromObjects('Dogs', 256, {key: 'spot'});
+        var bears = map.createFromObjects('Dogs', 334, {key: 'bear'});
+        var goodNPCs = map.createFromObjects('Goods', 16, {key: 'goodguy'});
+        var badNPCs = map.createFromObjects('Bads', 97, {key: 'badguy'});
+        this.totalBadNPCs = badNPCs.length;
+        this.badNPCsLength = badNPCs.length;
+
+        // Collisions (THE SAME FOR EVERY LEVEL)
+
+        this.collisionLayer.setCollisionByProperty({collides:true});
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
-        // Sprite Animations
+        // Sprite Animations (THE SAME FOR EVERY LEVEL)
 
         var menuScene = this.scene.get("MENU");
         for (var i = 0; i < menuScene.allDogs.length; i++) {
-            this.createAnimations(i);
+            createAnimations(i, this);
+        }
+        createGoodGuyAnimations(this);
+        createBadGuyAnimations(this);
+
+        // Player Sprite (THE SAME FOR EVERY LEVEL EXCEPT FOR SPAWN LOCATION)
+
+        var spawnX = 320;
+        var spawnY = 320;
+        createPlayer(this, spawnX, spawnY);
+
+        //var playerContainer = this.add.container(0, 0, [this.player, healthBox, loadingBar]);
+
+        // Dog NPC Sprites (THE SAME FOR EVERY LEVEL)
+
+        // Remove a loop if that particular sprite type does not exist in this map
+        for (var i = 0; i < pistachios.length; i++) {
+            var npc = createNPC(pistachios[i], this, 300);
+            pistachios[i].destroy();
+            npc.body.setSize(112, 80);
+        }
+        for (var i = 0; i < spots.length; i++) {
+            var npc = createNPC(spots[i], this, 300);
+            spots[i].destroy();
+            npc.body.setSize(112, 80);
+        }
+        for (var i = 0; i < bears.length; i++) {
+            var npc = createNPC(bears[i], this, 300);
+            bears[i].destroy();
+            npc.body.setSize(112, 80);
         }
 
-        // Player Sprite
+        // Human NPC Sprites (THE SAME FOR EVERY LEVEL)
 
-        this.dogIndex = menuScene.dogIndex;
-        this.player = this.physics.add.sprite(320, 320, 'dogs');
-        this.physics.add.collider(this.player, collisionLayer);
-        this.player.body.setCollideWorldBounds(true);
-
-        // NPC Sprites
-
-        this.npcs.length = 0;
-
-        for (var i = 0; i < 20; i++) {
-            var randomDogIndex = Math.floor((Math.random() * 3));
-            var xPos = Math.floor((Math.random() * map.widthInPixels));
-            while (xPos < 64 || xPos > map.widthInPixels - 64) {
-                xPos = Math.floor((Math.random() * map.widthInPixels));
-            }
-            var yPos = Math.floor((Math.random() * map.heightInPixels));
-            while (yPos < 64 || yPos > map.heightInPixels - 64) {
-                yPos = Math.floor((Math.random() * map.heightInPixels));
-            }
-            var npc = this.physics.add.sprite(xPos, yPos, 'dogs');
-            npc.anims.play(randomDogIndex + 'moveDown', true);
-            this.physics.add.collider(npc, this.player);
-            this.physics.add.collider(npc, collisionLayer);
-            npc.body.setCollideWorldBounds(true);
-            npc.setImmovable();
-            if (this.physics.collide(npc, this.npcs)) {
-                console.log("COLLIDED WITH ANOTHER SPRITE")
-            }
-            else if (this.physics.collide(npc, this.player)) {
-                console.log("COLLIDED WITH PLAYER")
-            }
-            else if (this.physics.overlap(npc, buildingTile)) {
-                console.log("COLLIDED WITH BUILDING")
-            }
-            this.npcs.push(npc);
-            
+        // Remove a loop if that particular sprite type does not exist in this map
+        for (var i = 0; i < goodNPCs.length; i++) {
+            var npc = createNPC(goodNPCs[i], this, 500);
+            goodNPCs[i].destroy();
+            npc.body.setSize(48, 112);
+        }
+        for (var i = 0; i < badNPCs.length; i++) {
+            var npc = createNPC(badNPCs[i], this, 500);
+            badNPCs[i].destroy();
+            npc.body.setSize(48, 112);
         }
 
-        // Camera
+        // Item Sprites (THE SAME FOR EVERY LEVEL)
+
+        // Remove a line if that particular item does not exist in this map
+        this.items = this.items.concat(bananas)
+        this.items = this.items.concat(cigarettes)
+        this.items = this.items.concat(gumwrappers)
+        this.items = this.items.concat(bottles)
+        this.items = this.items.concat(cans)
+        this.totalItems = this.items.length;
+
+        // Camera (THE SAME FOR EVERY LEVEL)
 
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.player);
 
+        // Sounds (THE SAME FOR EVERY LEVEL)
+
+        createSounds(this);
+
+        // Timer (THE SAME FOR EVERY LEVEL)
+    
+        // Timer decreases when reputation is higher, and the opposite when lower
+        this.seconds = 300 - Math.ceil(progress.REPUTATION * 1.2);
+        this.timer = this.time.delayedCall(this.seconds * 1000, loseLevel, [this], this);
+
+        // Quests (LINE BELOW IS THE SAME FOR EVERY LEVEL)
+
+        this.createQuests();
+        
     }
 
     update() {
 
-        if (this.input.keyboard.addKey('ESC').isDown) {
-            this.scene.start("MENU");
-        }
+        // ALL METHODS THE SAME FOR EVERY LEVEL
 
-        // Move sprites
+        // Listen for pause event
 
-        this.updatePlayerMovement();
+        pauseEvent(this);
 
-        // Update animations
+        // Update player animations
 
-        this.updatePlayerFrames();
+        updatePlayerFrames(this.player, this);
 
-        // Player Actions
+        // Move player
 
-        this.updatePlayerActions();
+        updatePlayerMovement(this.player, this);
 
-    }
+        // Listen for player actions
 
-    createAnimations(dogIndex) {
-        var startingFrame = dogIndex * 8;
-        this.anims.create({
-            key: dogIndex + 'moveDownIdle',
-            frames: [ { key: 'dogs', frame: startingFrame } ],
-            frameRate: 1
-        });
-        this.anims.create({
-            key: dogIndex + 'moveDown',
-            frames: this.anims.generateFrameNumbers('dogs', { start: startingFrame, end: startingFrame + 1 }),
-            frameRate: 5,
-            repeat: -1
-        });
-        this.anims.create({
-            key: dogIndex + 'moveRightIdle',
-            frames: [ { key: 'dogs', frame: startingFrame + 2 } ],
-            frameRate: 1
-        });
-        this.anims.create({
-            key: dogIndex + 'moveRight',
-            frames: this.anims.generateFrameNumbers('dogs', { start: startingFrame + 2, end: startingFrame + 3 }),
-            frameRate: 5,
-            repeat: -1
-        });
-        this.anims.create({
-            key: dogIndex + 'moveLeftIdle',
-            frames: [ { key: 'dogs', frame: startingFrame + 4 } ],
-            frameRate: 1
-        });
-        this.anims.create({
-            key: dogIndex + 'moveLeft',
-            frames: this.anims.generateFrameNumbers('dogs', { start: startingFrame + 4, end: startingFrame + 5 }),
-            frameRate: 5,
-            repeat: -1
-        });
-        this.anims.create({
-            key: dogIndex + 'moveUpIdle',
-            frames: [ { key: 'dogs', frame: startingFrame + 6 } ],
-            frameRate: 1
-        });
-        this.anims.create({
-            key: dogIndex + 'moveUp',
-            frames: this.anims.generateFrameNumbers('dogs', { start: startingFrame + 6, end: startingFrame + 7 }),
-            frameRate: 5,
-            repeat: -1
-        });
-    }
-    
-    updatePlayerMovement() {
-        this.player.body.setVelocityX(0);
-        this.player.body.setVelocityY(0);
+        updatePlayerActions(this.player, this);
 
-        this.xVel = VELOCITY;
-        this.yVel = VELOCITY;
+        // Update player health
 
-        if (this.input.keyboard.addKey('SHIFT').isDown) {
-            this.xVel  *= 1.9;
-            this.yVel *= 1.9;
-        }
-        else {
-            this.xVel *= 1;
-            this.yVel *= 1;
-        }
-    
-        if (this.input.keyboard.addKey('A').isDown) {
-            this.player.body.setVelocityX(-this.xVel);
-        }
-        else if (this.input.keyboard.addKey('D').isDown) {
-            this.player.body.setVelocityX(this.xVel);
-        }
-        if (this.input.keyboard.addKey('W').isDown) {
-            this.player.body.setVelocityY(-this.yVel);
-        }
-        else if (this.input.keyboard.addKey('S').isDown) {
-            this.player.body.setVelocityY(this.yVel);
-        }
-    }
+        updatePlayerHealth(this.healthBox, this.healthBar, this.player);
 
-    updatePlayerFrames() {
-        var dogIndex = this.dogIndex;
-        if (this.input.keyboard.addKey('A').isDown) {
-            this.player.anims.play(dogIndex + 'moveLeft', true);
-            this.lastKey = 0;
-        }
-        else if (this.input.keyboard.addKey('D').isDown) {
-            this.player.anims.play(dogIndex + 'moveRight', true);
-            this.lastKey = 1;
-        }
-        else if (this.input.keyboard.addKey('W').isDown) {
-            this.player.anims.play(dogIndex + 'moveUp', true);
-            this.lastKey = 2;
-        }
-        else if (this.input.keyboard.addKey('S').isDown) {
-            this.player.anims.play(dogIndex + 'moveDown', true);
-            this.lastKey = 3;
-        }
-        else if (this.lastKey == 0) {
-            this.player.anims.play(dogIndex + "moveLeftIdle");
-        }
-        else if (this.lastKey == 1) {
-            this.player.anims.play(dogIndex + "moveRightIdle");
-        }
-        else if (this.lastKey == 2) {
-            this.player.anims.play(dogIndex + "moveUpIdle");
-        }
-        else {
-            this.player.anims.play(dogIndex + "moveDownIdle");
-        }
-    }
+        // Move NPCS and listen for NPC actions
 
-    updatePlayerActions() {
-        if (this.input.keyboard.addKey('J').isDown) {
-            if (!this.attacked) {
-                console.log("ATTACK");
-                this.attacked = true;
+        for (var i = 0; i < this.npcs.length; i++) {
+            var npcFile = this.npcs[i];
+            var npc = npcFile.npc;
+            var health = npcFile.health;
+            var maxHealth = npcFile.maxHealth;
+            var healthBox = npcFile.healthBox;
+            var healthBar = npcFile.healthBar;
+            if (health <= 0) {
+                this.npcs.splice(i, 1);
+                processNPCDeath(npcFile, this);
             }
+            updateNPCMovement(this, npc);
+            updateEnemyActions(this, npc);
+            updateEnemyHealth(npc, health, maxHealth, healthBox, healthBar);
         }
-        else {
-            this.attacked = false;
+
+        // Update player reputation
+
+        updateReputation(this);
+
+        // Update Quests
+
+        this.updateQuest();
+
+        // Update Timer
+
+        updateTimer(this);
+
+        // Update Volume
+        
+        this.sound.setVolume(SOUNDVOLUME);
+
+    }
+
+    /******************************************** DIFFERENT FOR EACH LEVEL ********************************************/
+
+    createQuests() {
+
+        var questOne = this.add.text(QUESTX + 130, QUESTY + 50, "• Collect all trash\n(0/50 collected)", {
+            fontFamily: 'Georgia',
+            fontSize: '28px',
+            fill: '#ffffff'
+        }).setDepth(DEPTH.OVERLAYTEXT);
+        questOne.setScrollFactor(0);
+        questOne.setStroke('black', 3);
+        questOne.setOrigin(0.5);
+        this.quests.push(questOne);
+
+        var questTwo = this.add.text(QUESTX + 130, QUESTY + 150, "• Get rid of the\nbad guys\n(0/5 gone)", {
+            fontFamily: 'Georgia',
+            fontSize: '28px',
+            fill: '#ffffff'
+        }).setDepth(DEPTH.OVERLAYTEXT);
+        questTwo.setScrollFactor(0);
+        questTwo.setStroke('black', 3);
+        questTwo.setOrigin(0.5);
+        this.quests.push(questTwo);
+
+    }
+
+    updateQuest() {
+
+        if (this.quests.length == 0) {
+            winLevel(this);
         }
-        if (this.input.keyboard.addKey('K').isDown) {
-            if (!this.picked) {
-                if (this.hasItem) {
-                    console.log("DROPPED ITEM");
-                    this.hasItem = false;
+
+        for (var i = 0; i < this.quests.length; i++) {
+
+            if (i == 0) {
+                var itemsCollected = this.totalItems - this.items.length;
+                this.quests[i].setText("• Collect all trash\n(" + itemsCollected + "/" + this.totalItems + " collected)");
+                if (itemsCollected == this.totalItems) {
+                    this.quests[i].setFill("#7CFC00");
+                    this.sound.play('questSound');
+                    this.quests.splice(i, 1);
+                    changeReputation(20);
+                    break;
                 }
-                else {
-                    console.log("PICKED UP ITEM");
-                    this.hasItem = true;
+            }
+
+            else if (i == 1) {
+                var badGuysGone = this.totalBadNPCs - (this.badNPCsLength);
+                this.quests[i].setText("• Get rid of the\nbad guys\n(" + badGuysGone + "/5 gone)");
+                if (badGuysGone == this.totalBadNPCs) {
+                    this.quests[i].setFill("#7CFC00");
+                    this.sound.play('questSound');
+                    this.quests.splice(i, 1);
+                    changeReputation(20);
+                    break;
                 }
-                this.picked = true;
             }
+
         }
-        else {
-            this.picked = false;
-        }
-        if (this.input.keyboard.addKey('L').isDown) {
-            if (!this.barked) {
-                console.log("BARK");
-                this.barked = true;
-            }
-        }
-        else {
-            this.barked = false;
-        }
+
     }
 
 }

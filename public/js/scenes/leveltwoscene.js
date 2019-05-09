@@ -5,6 +5,8 @@ class levelTwoScene extends Phaser.Scene {
             key: "LEVELTWO"
         });
         this.player = null;
+        this.healthBox = null;
+        this.healthBar = null;
         this.npcs = [];
         this.collisionLayer = null;
         this.items = [];
@@ -27,7 +29,8 @@ class levelTwoScene extends Phaser.Scene {
 
         progress.NEW = false;
         progress.CURRENTLEVEL = "LEVELTWO" 
-        progress.CURRENTLEVELINDEX = 1;
+        progress.CURRENTLEVELINDEX = 0;
+        PLAYERHEALTH = 500;
 
         // Overlay (THE SAME FOR EVERY LEVEL)
 
@@ -37,8 +40,8 @@ class levelTwoScene extends Phaser.Scene {
         
         var map = this.make.tilemap({ key: 'levelOneMap' });
         var tileset = map.addTilesetImage("citytileset", 'cityTiles');
-        map.createStaticLayer("Background", tileset, 0, 0).setDepth(-1);
-        this.collisionLayer = map.createStaticLayer("Collision", tileset, 0, 0).setDepth(1);
+        map.createStaticLayer("Background", tileset, 0, 0).setDepth(DEPTH.BACKGROUND);
+        this.collisionLayer = map.createStaticLayer("Collision", tileset, 0, 0).setDepth(DEPTH.COLLISION);
 
         // Objects (THE SAME FOR EVERY LEVEL)
 
@@ -53,6 +56,8 @@ class levelTwoScene extends Phaser.Scene {
         var bears = map.createFromObjects('Dogs', 334, {key: 'bear'});
         var goodNPCs = map.createFromObjects('Goods', 16, {key: 'goodguy'});
         var badNPCs = map.createFromObjects('Bads', 97, {key: 'badguy'});
+        this.totalBadNPCs = badNPCs.length;
+        this.badNPCsLength = badNPCs.length;
 
         // Collisions (THE SAME FOR EVERY LEVEL)
 
@@ -72,36 +77,41 @@ class levelTwoScene extends Phaser.Scene {
 
         var spawnX = 320;
         var spawnY = 320;
-        this.player = this.physics.add.sprite(spawnX, spawnY, getDog(DOGINDEX)).setDepth(0);
-        this.physics.add.collider(this.player, this.collisionLayer);
-        this.player.body.setCollideWorldBounds(true);
+        createPlayer(this, spawnX, spawnY);
+
+        //var playerContainer = this.add.container(0, 0, [this.player, healthBox, loadingBar]);
 
         // Dog NPC Sprites (THE SAME FOR EVERY LEVEL)
 
         // Remove a loop if that particular sprite type does not exist in this map
         for (var i = 0; i < pistachios.length; i++) {
-            createNPC(pistachios[i], this);
+            var npc = createNPC(pistachios[i], this, 300);
             pistachios[i].destroy();
+            npc.body.setSize(112, 80);
         }
         for (var i = 0; i < spots.length; i++) {
-            createNPC(spots[i], this);
+            var npc = createNPC(spots[i], this, 300);
             spots[i].destroy();
+            npc.body.setSize(112, 80);
         }
         for (var i = 0; i < bears.length; i++) {
-            createNPC(bears[i], this);
+            var npc = createNPC(bears[i], this, 300);
             bears[i].destroy();
+            npc.body.setSize(112, 80);
         }
 
         // Human NPC Sprites (THE SAME FOR EVERY LEVEL)
 
         // Remove a loop if that particular sprite type does not exist in this map
         for (var i = 0; i < goodNPCs.length; i++) {
-            createNPC(goodNPCs[i], this);
+            var npc = createNPC(goodNPCs[i], this, 500);
             goodNPCs[i].destroy();
+            npc.body.setSize(48, 112);
         }
         for (var i = 0; i < badNPCs.length; i++) {
-            createNPC(badNPCs[i], this);
+            var npc = createNPC(badNPCs[i], this, 500);
             badNPCs[i].destroy();
+            npc.body.setSize(48, 112);
         }
 
         // Item Sprites (THE SAME FOR EVERY LEVEL)
@@ -143,23 +153,38 @@ class levelTwoScene extends Phaser.Scene {
 
         pauseEvent(this);
 
-        // Move player
-
-        updatePlayerMovement(this.player, this);
-
         // Update player animations
 
         updatePlayerFrames(this.player, this);
 
-        // Listen for player Actions
+        // Move player
+
+        updatePlayerMovement(this.player, this);
+
+        // Listen for player actions
 
         updatePlayerActions(this.player, this);
+
+        // Update player health
+
+        updatePlayerHealth(this.healthBox, this.healthBar, this.player);
 
         // Move NPCS and listen for NPC actions
 
         for (var i = 0; i < this.npcs.length; i++) {
-            updateNPCMovement(this, this.npcs[i]);
-            updateEnemyActions(this, this.npcs[i]);
+            var npcFile = this.npcs[i];
+            var npc = npcFile.npc;
+            var health = npcFile.health;
+            var maxHealth = npcFile.maxHealth;
+            var healthBox = npcFile.healthBox;
+            var healthBar = npcFile.healthBar;
+            if (health <= 0) {
+                this.npcs.splice(i, 1);
+                processNPCDeath(npcFile, this);
+            }
+            updateNPCMovement(this, npc);
+            updateEnemyActions(this, npc);
+            updateEnemyHealth(npc, health, maxHealth, healthBox, healthBar);
         }
 
         // Update player reputation
@@ -184,15 +209,25 @@ class levelTwoScene extends Phaser.Scene {
 
     createQuests() {
 
-        var questOne = this.add.text(WIDTH - 270, HEIGHT - 550, "• Collect all trash\n(0/50 collected)", {
+        var questOne = this.add.text(QUESTX + 130, QUESTY + 50, "• Collect all trash\n(0/50 collected)", {
             fontFamily: 'Georgia',
             fontSize: '28px',
             fill: '#ffffff'
-        }).setDepth(15);
+        }).setDepth(DEPTH.OVERLAYTEXT);
         questOne.setScrollFactor(0);
         questOne.setStroke('black', 3);
         questOne.setOrigin(0.5);
         this.quests.push(questOne);
+
+        var questTwo = this.add.text(QUESTX + 130, QUESTY + 150, "• Get rid of the\nbad guys\n(0/5 gone)", {
+            fontFamily: 'Georgia',
+            fontSize: '28px',
+            fill: '#ffffff'
+        }).setDepth(DEPTH.OVERLAYTEXT);
+        questTwo.setScrollFactor(0);
+        questTwo.setStroke('black', 3);
+        questTwo.setOrigin(0.5);
+        this.quests.push(questTwo);
 
     }
 
@@ -206,8 +241,20 @@ class levelTwoScene extends Phaser.Scene {
 
             if (i == 0) {
                 var itemsCollected = this.totalItems - this.items.length;
-                this.quests[i].setText("• Collect all trash\n(" + itemsCollected + "/50 collected)");
+                this.quests[i].setText("• Collect all trash\n(" + itemsCollected + "/" + this.totalItems + " collected)");
                 if (itemsCollected == this.totalItems) {
+                    this.quests[i].setFill("#7CFC00");
+                    this.sound.play('questSound');
+                    this.quests.splice(i, 1);
+                    changeReputation(20);
+                    break;
+                }
+            }
+
+            else if (i == 1) {
+                var badGuysGone = this.totalBadNPCs - (this.badNPCsLength);
+                this.quests[i].setText("• Get rid of the\nbad guys\n(" + badGuysGone + "/5 gone)");
+                if (badGuysGone == this.totalBadNPCs) {
                     this.quests[i].setFill("#7CFC00");
                     this.sound.play('questSound');
                     this.quests.splice(i, 1);
