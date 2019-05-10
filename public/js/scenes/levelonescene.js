@@ -11,6 +11,7 @@ class levelOneScene extends Phaser.Scene {
         this.collisionLayer = null;
         this.items = [];
         this.quests = [];
+        this.questsCompleted = 0;
         this.currentReputation = null;
         this.seconds = 0;
         this.timerText = "";
@@ -214,57 +215,73 @@ class levelOneScene extends Phaser.Scene {
 
     createQuests() {
 
-        var questOne = this.add.text(QUESTX + 130, QUESTY + 50, "• Collect all trash\n(0/50 collected)", {
-            fontFamily: 'Georgia',
+        var questOne = this.add.text(QUESTX + 20, QUESTY + 20, "• Collect all trash (0/50 collected)", {
+            fontFamily: FONT,
             fontSize: '28px',
             fill: '#ffffff'
         }).setDepth(DEPTH.OVERLAYTEXT);
         questOne.setScrollFactor(0);
         questOne.setStroke('black', 3);
-        questOne.setOrigin(0.5);
-        this.quests.push(questOne);
+        questOne.setWordWrapWidth(WORDWRAPWIDTH);
+        this.quests.push({
+            questText: questOne,
+            questStatus: "INCOMPLETE"
+        });
 
-        var questTwo = this.add.text(QUESTX + 130, QUESTY + 150, "• Get rid of the\nbad guys\n(0/5 gone)", {
-            fontFamily: 'Georgia',
+        var questTwo = this.add.text(QUESTX + 20, QUESTY + 100, "• Get rid of the\nbad guys\n(0/5 gone)", {
+            fontFamily: FONT,
             fontSize: '28px',
             fill: '#ffffff'
         }).setDepth(DEPTH.OVERLAYTEXT);
         questTwo.setScrollFactor(0);
         questTwo.setStroke('black', 3);
-        questTwo.setOrigin(0.5);
-        this.quests.push(questTwo);
+        questTwo.setWordWrapWidth(WORDWRAPWIDTH);
+        this.quests.push({
+            questText: questTwo,
+            questStatus: "INCOMPLETE"
+        });
 
     }
 
     updateQuest() {
 
-        if (this.quests.length == 0) {
+        if (this.quests.length == this.questsCompleted) {
             winLevel(this);
         }
 
         for (var i = 0; i < this.quests.length; i++) {
 
+            var questText = this.quests[i].questText;
+            var questStatus = this.quests[i].questStatus;
+
             if (i == 0) {
                 var itemsCollected = this.totalItems - this.items.length;
-                this.quests[i].setText("• Collect all trash\n(" + itemsCollected + "/" + this.totalItems + " collected)");
+                questText.setText("• Collect all trash (" + itemsCollected + "/" + this.totalItems + " collected)");
                 if (itemsCollected == this.totalItems) {
-                    this.quests[i].setFill("#7CFC00");
-                    this.sound.play('questSound');
-                    this.quests.splice(i, 1);
-                    changeReputation(20);
-                    break;
+                    if (questStatus == "INCOMPLETE") {
+                        this.quests[i].questStatus = "COMPLETE";
+                        questText.setFill(GOODQUESTFILL);
+                        this.sound.play('questSound');
+                        this.questsCompleted++;
+                        changeReputation(20);
+                        break;
+                    }
+                    
                 }
             }
 
             else if (i == 1) {
                 var badGuysGone = this.totalBadNPCs - (this.badNPCsLength);
-                this.quests[i].setText("• Get rid of the\nbad guys\n(" + badGuysGone + "/5 gone)");
+                questText.setText("• Get rid of the bad guys (" + badGuysGone + "/5 gone)");
                 if (badGuysGone == this.totalBadNPCs) {
-                    this.quests[i].setFill("#7CFC00");
-                    this.sound.play('questSound');
-                    this.quests.splice(i, 1);
-                    changeReputation(20);
-                    break;
+                    if (questStatus == "INCOMPLETE") {
+                        this.quests[i].questStatus = "COMPLETE";
+                        questText.setFill(GOODQUESTFILL);
+                        this.sound.play('questSound');
+                        this.questsCompleted++;
+                        changeReputation(20);
+                        break;
+                    }
                 }
             }
 

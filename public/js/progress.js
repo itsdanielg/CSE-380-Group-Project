@@ -269,7 +269,7 @@ function createLevelOverlay(scene) {
     // Text
 
     var reputationText = scene.add.text(170, 20, "Reputation", {
-        fontFamily: 'Georgia',
+        fontFamily: FONT,
         fontSize: '22px',
         fill: '#ffffff'
     }).setDepth(DEPTH.OVERLAYTEXT);
@@ -292,13 +292,13 @@ function createLevelOverlay(scene) {
     var questBox = scene.add.graphics().setDepth(DEPTH.OVERLAY);
     questBox.fillStyle(0x000000);
     questBox.setAlpha(0.4);
-    questBox.fillRect(QUESTX, QUESTY, 400, 500);
+    questBox.fillRect(QUESTX, QUESTY, 300, 500);
     questBox.setScrollFactor(0);
 
     // Timer
 
-    scene.timerText = scene.add.text(WIDTH/2, 20, "", {
-        fontFamily: 'Georgia',
+    scene.timerText = scene.add.text(WIDTH/2, 30, "", {
+        fontFamily: FONT,
         fontSize: '40px',
         fill: '#ffffff'
     }).setDepth(DEPTH.OVERLAYTEXT);

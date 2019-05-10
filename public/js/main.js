@@ -11,6 +11,10 @@ var DEPTH = {
     OVERLAY: 5,
     OVERLAYTEXT: 6,
 }
+var FONT = 'Lato';
+var WORDWRAPWIDTH = 260;
+var GOODQUESTFILL = "#7CFC00";
+var BADQUESTFILL = "#FF2D00";
 
 var config = {
     type: Phaser.AUTO,
