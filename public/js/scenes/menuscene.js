@@ -4,7 +4,6 @@ class menuScene extends Phaser.Scene {
         super({
             key: "MENU"
         });
-        this.sceneLoaded = false;
         this.allDogs = []
         this.allDogsDescription = []
         this.allLevels = []
@@ -40,6 +39,7 @@ class menuScene extends Phaser.Scene {
         var currentLevel4 = this.add.image(0, 0, "currentLevelFour");
         var currentLevel5 = this.add.image(0, 0, "currentLevelFive");
         var currentLevel6 = this.add.image(0, 0, "currentLevelSix");
+
         this.allDogs.push(dog1, dog2, dog3);
         this.allDogsDescription.push(description1, description2, description3);
         this.allLevels.push(currentLevel1, currentLevel2, currentLevel3, currentLevel4, currentLevel5, currentLevel6);
@@ -134,7 +134,7 @@ class menuScene extends Phaser.Scene {
             this.scene.pause();
             var controlScene = this.scene.get("CONTROLS");
             controlScene.sceneCalled = "MENU";
-            this.scene.moveAbove("MENU", "CONTROLS");
+            this.scene.bringToTop("CONTROLS");
         })
 
         helpButton.setInteractive({useHandCursor: true});
@@ -147,7 +147,7 @@ class menuScene extends Phaser.Scene {
         helpButton.on("pointerup", () => {
             this.scene.launch("HELP");
             this.scene.pause();
-            this.scene.moveAbove("MENU", "HELP");
+            this.scene.bringToTop("HELP");
         })
 
         leftButton.setInteractive({useHandCursor: true});

@@ -4,27 +4,15 @@ class completeScene extends Phaser.Scene {
         super({
             key: "COMPLETE"
         });
-        this.message = ""
-        this.text = null;
-        this.nextLevel = "";
     }
 
     create() {
-
-        this.message = ""
-        this.text = null;
-        this.nextLevel = "";
 
         // Add images/buttons
 
         var completeBG = this.add.image(0, 0, "completeBG").setDepth(-1);
         var continueButton = this.add.image(0, 0, "completeContinue");
         var exitButton = this.add.image(0, 0, "cheatExit");
-        this.text = this.add.text(WIDTH/2, HEIGHT/2 - 20, this.message, {
-            fontSize: '48px',
-            fill: '#ffffff'
-        }).setOrigin(0.5);
-        this.text.setStroke('black', 5);
 
         // Scale Buttons
 

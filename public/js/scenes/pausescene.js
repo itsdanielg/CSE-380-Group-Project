@@ -4,8 +4,6 @@ class pauseScene extends Phaser.Scene {
         super({
             key: "PAUSE"
         });
-        this.soundSlider = null;
-        this.musicSlider = null;
     }
 
     create() {
@@ -18,9 +16,8 @@ class pauseScene extends Phaser.Scene {
         var saveAndExitButton = this.add.image(0, 0, "pauseSave");
         var exitButton = this.add.image(0, 0, "pauseExit");
         var cheatsButton = this.add.image(0, 0, "pauseCheats");
-        this.soundSlider = this.add.image(0, 0, "pauseSlider");
-        this.musicSlider = this.add.image(0, 0, "pauseSlider");
-        
+        var soundSlider = this.add.image(0, 0, "pauseSlider");
+        var musicSlider = this.add.image(0, 0, "pauseSlider");
 
         // Scale Buttons
 
@@ -30,8 +27,8 @@ class pauseScene extends Phaser.Scene {
         saveAndExitButton.setScale(SCALE);
         exitButton.setScale(SCALE);
         cheatsButton.setScale(SCALE);
-        this.soundSlider.setScale(SCALE - 0.15);
-        this.musicSlider.setScale(SCALE - 0.15);
+        soundSlider.setScale(SCALE - 0.15);
+        musicSlider.setScale(SCALE - 0.15);
 
         // Position Images
 
@@ -47,8 +44,8 @@ class pauseScene extends Phaser.Scene {
         saveAndExitButton.setPosition(textX, textY + (2 * textYOffset));
         exitButton.setPosition(textX, textY + (3 * textYOffset));
         cheatsButton.setPosition(textX, textY + (4 * textYOffset));
-        this.soundSlider.setPosition(soundX, textY + (6 * textYOffset) - 5);
-        this.musicSlider.setPosition(musicX, textY + (6 * textYOffset) - 5);
+        soundSlider.setPosition(soundX, textY + (6 * textYOffset) - 5);
+        musicSlider.setPosition(musicX, textY + (6 * textYOffset) - 5);
 
         // Pointer Events
 
@@ -87,6 +84,7 @@ class pauseScene extends Phaser.Scene {
             saveAndExitButton.setScale(SCALE);
         })
         saveAndExitButton.on("pointerup", () => {
+            saveProgress(this);
             this.scene.stop(progress.CURRENTLEVEL);
             this.scene.start("MENU");
         })
@@ -117,9 +115,9 @@ class pauseScene extends Phaser.Scene {
             this.scene.bringToTop("CHEAT");
         })
         
-        this.soundSlider.setInteractive({useHandCursor: true});
-        this.input.setDraggable(this.soundSlider);
-        this.soundSlider.on('drag', function (pointer, dragX, dragY) {
+        soundSlider.setInteractive({useHandCursor: true});
+        this.input.setDraggable(soundSlider);
+        soundSlider.on('drag', function (pointer, dragX, dragY) {
             this.x = dragX;
             if (this.x < 170) {
                 this.x = 170;
@@ -130,9 +128,9 @@ class pauseScene extends Phaser.Scene {
             SOUNDVOLUME = (this.x - 170) / 15.4;
         });
 
-        this.musicSlider.setInteractive({useHandCursor: true});
-        this.input.setDraggable(this.musicSlider);
-        this.musicSlider.on('drag', function (pointer, dragX, dragY) {
+        musicSlider.setInteractive({useHandCursor: true});
+        this.input.setDraggable(musicSlider);
+        musicSlider.on('drag', function (pointer, dragX, dragY) {
             this.x = dragX;
             if (this.x < 740) {
                 this.x = 740;
