@@ -108,7 +108,15 @@ class menuScene extends Phaser.Scene {
             startButton.setScale(SCALE);
         })
         startButton.on("pointerup", () => {
-            this.scene.start(progress.CURRENTLEVEL);
+            if (progress.SAVED) {
+                progress.SAVED = false;
+                this.scene.stop();
+                this.scene.wake(progress.CURRENTLEVEL);
+                this.scene.bringToTop(progress.CURRENTLEVEL);
+            }
+            else {
+                this.scene.start(progress.CURRENTLEVEL);
+            }
         })
 
         levelSelectButton.setInteractive({useHandCursor: true});

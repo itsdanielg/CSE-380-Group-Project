@@ -84,8 +84,8 @@ class pauseScene extends Phaser.Scene {
             saveAndExitButton.setScale(SCALE);
         })
         saveAndExitButton.on("pointerup", () => {
-            saveProgress(this);
-            this.scene.stop(progress.CURRENTLEVEL);
+            progress.SAVED = true;
+            this.scene.sleep(progress.CURRENTLEVEL);
             this.scene.start("MENU");
         })
 

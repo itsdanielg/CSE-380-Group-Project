@@ -60,6 +60,10 @@ class levelScene extends Phaser.Scene {
             levelOneButton.setScale(SCALE);
         })
         levelOneButton.on("pointerup", () => {
+            if (progress.SAVED) {
+                progress.SAVED = false;
+                this.scene.stop(progress.CURRENTLEVEL);
+            }
             this.scene.start("LEVELONE");
         })
 
@@ -71,6 +75,10 @@ class levelScene extends Phaser.Scene {
             levelTwoButton.setScale(SCALE);
         })
         levelTwoButton.on("pointerup", () => {
+            if (progress.SAVED) {
+                progress.SAVED = false;
+                this.scene.stop(progress.CURRENTLEVEL);
+            }
             this.scene.start("LEVELTWO");
         })
 
@@ -82,6 +90,10 @@ class levelScene extends Phaser.Scene {
             levelThreeButton.setScale(SCALE);
         })
         levelThreeButton.on("pointerup", () => {
+            if (progress.SAVED) {
+                progress.SAVED = false;
+                this.scene.stop(progress.CURRENTLEVEL);
+            }
             this.scene.start("LEVELTHREE");
         })
 
@@ -93,6 +105,10 @@ class levelScene extends Phaser.Scene {
             levelFourButton.setScale(SCALE);
         })
         levelFourButton.on("pointerup", () => {
+            if (progress.SAVED) {
+                progress.SAVED = false;
+                this.scene.stop(progress.CURRENTLEVEL);
+            }
             this.scene.start("LEVELFOUR");
         })
 
@@ -104,6 +120,10 @@ class levelScene extends Phaser.Scene {
             levelFiveButton.setScale(SCALE);
         })
         levelFiveButton.on("pointerup", () => {
+            if (progress.SAVED) {
+                progress.SAVED = false;
+                this.scene.stop(progress.CURRENTLEVEL);
+            }
             this.scene.start("LEVELFIVE");
         })
 
@@ -115,6 +135,10 @@ class levelScene extends Phaser.Scene {
             levelSixButton.setScale(SCALE);
         })
         levelSixButton.on("pointerup", () => {
+            if (progress.SAVED) {
+                progress.SAVED = false;
+                this.scene.stop(progress.CURRENTLEVEL);
+            }
             this.scene.start("LEVELSIX");
         })
 
