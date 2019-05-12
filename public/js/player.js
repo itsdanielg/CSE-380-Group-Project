@@ -1,8 +1,6 @@
-var VELOCITY = 250;
 var DOGINDEX = 0;
 var INVINCIBLE = false;
 var PLAYERHEALTH = 500;
-var PLAYERDAMAGE = 100;
 
 var LASTKEY = 3;
 var ANIMATIONPLAYING = false;
@@ -24,21 +22,8 @@ function createPlayer(scene, spawnX, spawnY) {
 
 }
 
-function getDog(dogIndex) {
-    var dogKey = "";
-    if (dogIndex == 0) {
-        dogKey = "pistachio";
-    }
-    else if (dogIndex == 1) {
-        dogKey = "spot";
-    }
-    else {
-        dogKey = "bear";
-    }
-    return dogKey;
-}
-
 function updatePlayerFrames(player, scene) {
+
     if (!ANIMATIONPLAYING) {
         if (scene.input.keyboard.addKey('A').isDown) {
             player.anims.play(DOGINDEX + 'moveLeft', true);
@@ -69,9 +54,11 @@ function updatePlayerFrames(player, scene) {
             player.anims.play(DOGINDEX + "moveDownIdle");
         }
     }
+
 }
 
 function updatePlayerMovement(player, scene) {
+
     var xVel = 0;
     var yVel = 0;
 
@@ -99,6 +86,7 @@ function updatePlayerMovement(player, scene) {
     else if (scene.input.keyboard.addKey('S').isDown) {
         player.body.setVelocityY(yVel);
     }
+
 }
 
 function updatePlayerHealth(healthBox, healthBar, player) {
@@ -118,9 +106,12 @@ function updatePlayerHealth(healthBox, healthBar, player) {
 }
 
 function updatePlayerActions(player, scene) {
+
     if (scene.input.keyboard.addKey('J').isDown) {
         scene.input.keyboard.removeKey('J');
-        scene.sound.play('dogAttackSound');
+        scene.sound.play('dogAttackSound', {
+            volume: SOUNDVOLUME
+        });
         if (LASTKEY == 0) {
             player.anims.play(DOGINDEX + "attackLeft");
             player.on('animationcomplete', animationComplete, scene);
@@ -146,6 +137,7 @@ function updatePlayerActions(player, scene) {
             attackEvent(player, npc, 0, this);
         }
     }
+
     if (scene.input.keyboard.addKey('K').isDown) {
         scene.input.keyboard.removeKey('K');
         var playerBounds = player.getBounds();
@@ -154,7 +146,9 @@ function updatePlayerActions(player, scene) {
             var itemBounds = item.getBounds();
             if (Phaser.Geom.Intersects.RectangleToRectangle(playerBounds, itemBounds)) {
                 item.destroy();
-                scene.sound.play('dogItemSound');
+                scene.sound.play('dogItemSound', {
+                    volume: SOUNDVOLUME
+                });
                 scene.items.splice(i, 1);
                 changeReputation(1);
                 break;
@@ -162,9 +156,12 @@ function updatePlayerActions(player, scene) {
         }
         
     }
+    
     if (scene.input.keyboard.addKey('L').isDown) {
         scene.input.keyboard.removeKey('L');
-        scene.sound.play('dogBarkSound');
+        scene.sound.play('dogBarkSound', {
+            volume: SOUNDVOLUME
+        });
         if (LASTKEY == 0) {
             player.anims.play(DOGINDEX + "barkLeft");
             player.on('animationcomplete', animationComplete, this);
@@ -186,6 +183,7 @@ function updatePlayerActions(player, scene) {
             ANIMATIONPLAYING = true;
         }
     }
+
 }
 
 function animationComplete() {

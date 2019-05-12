@@ -1,6 +1,3 @@
-var HUMANDAMAGE = 50;
-var DOGDAMAGE = 20;
-
 function createNPC(npc, scene, health) {
     var arcadeNPC = scene.physics.add.sprite(npc.x, npc.y, npc.texture.key).setDepth(DEPTH.SPRITE);
     scene.physics.add.collider(arcadeNPC, scene.collisionLayer);
@@ -150,7 +147,9 @@ function processNPCDeath(npcFile, scene) {
     else if (npc.texture.key == 'pistachio') {
         npc.anims.play('0dying', true);
         npc.on('animationcomplete', function () {
-            scene.sound.play('dogDyingSound');
+            scene.sound.play('dogDyingSound', {
+                volume: SOUNDVOLUME
+            });
             npc.destroy();
             healthBox.destroy();
             healthBar.destroy();
@@ -160,7 +159,9 @@ function processNPCDeath(npcFile, scene) {
     else if (npc.texture.key == 'spot') {
         npc.anims.play('1dying', true);
         npc.on('animationcomplete', function () {
-            scene.sound.play('dogDyingSound');
+            scene.sound.play('dogDyingSound', {
+                volume: SOUNDVOLUME
+            });
             npc.destroy();
             healthBox.destroy();
             healthBar.destroy();
@@ -170,7 +171,9 @@ function processNPCDeath(npcFile, scene) {
     else if (npc.texture.key == 'bear') {
         npc.anims.play('2dying', true);
         npc.on('animationcomplete', function () {
-            scene.sound.play('dogDyingSound');
+            scene.sound.play('dogDyingSound', {
+                volume: SOUNDVOLUME
+            });
             npc.destroy();
             healthBox.destroy();
             healthBar.destroy();
@@ -180,7 +183,9 @@ function processNPCDeath(npcFile, scene) {
     else {
         npc.anims.play('ggDying', true);
         npc.on('animationcomplete', function () {
-            scene.sound.play('humanDyingSound');
+            scene.sound.play('humanDyingSound', {
+                volume: SOUNDVOLUME
+            });
             npc.destroy();
             healthBox.destroy();
             healthBar.destroy();

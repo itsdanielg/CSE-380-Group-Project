@@ -1,19 +1,15 @@
 var progress = {
     NEW: true,
+    SAVED: false,
     CURRENTLEVEL: "LEVELONE",
     CURRENTLEVELINDEX: 0,
     REPUTATION: 0
 }
 
 var SOUNDVOLUME = 10;
-var MUSICVOLUME = 10;
-var MAXREPUTATION = 106;
-var MINREPUTATION = -MAXREPUTATION;
+var MUSICVOLUME = 1;
 
-var QUESTX = 1280 - 300;
-var QUESTY = 720 - 600
-
-function createAnimations(dogIndex, scene) {
+function getDog(dogIndex) {
     var dogKey = "";
     if (dogIndex == 0) {
         dogKey = "pistachio";
@@ -24,243 +20,245 @@ function createAnimations(dogIndex, scene) {
     else {
         dogKey = "bear";
     }
-    var animFrameRate = 5;
+    return dogKey;
+}
+
+function createDogAnimations(dogIndex, scene) {
+    var dogKey = getDog(dogIndex);
     scene.anims.create({
         key: dogIndex + 'moveDownIdle',
         frames: [ { key: dogKey, frame: 0 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: dogIndex + 'moveDown',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 0, end: 1 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: dogIndex + 'moveUpIdle',
         frames: [ { key: dogKey, frame: 6 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: dogIndex + 'moveUp',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 6, end: 7 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: dogIndex + 'moveLeftIdle',
         frames: [ { key: dogKey, frame: 12 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: dogIndex + 'moveLeft',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 12, end: 13 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: dogIndex + 'moveRightIdle',
         frames: [ { key: dogKey, frame: 18 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: dogIndex + 'moveRight',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 18, end: 19 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: dogIndex + 'attackDown',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 24, end: 28 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: dogIndex + 'attackUp',
         frames: [ { key: dogKey, frame: 30 } ],
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: dogIndex + 'attackLeft',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 36, end: 41 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: dogIndex + 'attackRight',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 42, end: 47 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: dogIndex + 'barkDown',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 48, end: 51 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: dogIndex + 'barkUp',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 54, end: 55 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: dogIndex + 'barkLeft',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 60, end: 61 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: dogIndex + 'barkRight',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 66, end: 67 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: dogIndex + 'dying',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 72, end: 74 }),
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     
     
 }
 
 function createGoodGuyAnimations(scene) {
-    var animFrameRate = 5;
     scene.anims.create({
         key: 'ggMoveDownIdle',
         frames: [ { key: 'goodguy', frame: 0 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: 'ggMoveDown',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 0, end: 2 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: 'ggMoveUpIdle',
         frames: [ { key: 'goodguy', frame: 9 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: 'ggMoveUp',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 9, end: 11 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: 'ggMoveLeftIdle',
         frames: [ { key: 'goodguy', frame: 18 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: 'ggMoveLeft',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 18, end: 22 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: 'ggMoveRightIdle',
         frames: [ { key: 'goodguy', frame: 27 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: 'ggMoveRight',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 27, end: 31 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: 'ggAttackDown',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 36, end: 38 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: 'ggAttackUp',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 45, end: 47 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: 'ggAttackLeft',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 54, end: 62 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: 'ggAttackRight',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 63, end: 71 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: 'ggDying',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 72, end: 76 }),
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
 }
 
 function createBadGuyAnimations(scene) {
-    var animFrameRate = 5;
     scene.anims.create({
         key: 'bgMoveDownIdle',
         frames: [ { key: 'badguy', frame: 0 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: 'bgMoveDown',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 0, end: 2 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: 'bgMoveUpIdle',
         frames: [ { key: 'badguy', frame: 9 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: 'bgMoveUp',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 9, end: 11 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: 'bgMoveLeftIdle',
         frames: [ { key: 'badguy', frame: 18 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: 'bgMoveLeft',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 18, end: 22 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: 'bgMoveRightIdle',
         frames: [ { key: 'badguy', frame: 27 } ],
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
     scene.anims.create({
         key: 'bgMoveRight',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 27, end: 31 }),
-        frameRate: animFrameRate,
+        frameRate: ANIMATION_FRAME_RATE,
         repeat: -1
     });
     scene.anims.create({
         key: 'bgAttackDown',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 36, end: 38 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: 'bgAttackUp',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 45, end: 47 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: 'bgAttackLeft',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 54, end: 62 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: 'bgAttackRight',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 63, end: 71 }),
-        frameRate: animFrameRate + 10
+        frameRate: ANIMATION_FRAME_RATE + 10
     });
     scene.anims.create({
         key: 'bgDying',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 72, end: 76 }),
-        frameRate: animFrameRate
+        frameRate: ANIMATION_FRAME_RATE
     });
 }
 
@@ -272,18 +270,21 @@ function createLevelOverlay(scene) {
         fontFamily: FONT,
         fontSize: '22px',
         fill: '#ffffff'
-    }).setDepth(DEPTH.OVERLAYTEXT);
+    })
+    reputationText.setDepth(DEPTH.OVERLAYTEXT);
     reputationText.setScrollFactor(0);
     reputationText.setStroke('black', 3);
     reputationText.setOrigin(0.5);
 
     // Reputation
 
-    var reputationMeter = scene.add.image(170, 70, "reputationMeter").setDepth(DEPTH.OVERLAY);
+    var reputationMeter = scene.add.image(170, 70, "reputationMeter");
+    reputationMeter.setDepth(DEPTH.OVERLAY);
     reputationMeter.setScrollFactor(0);
     reputationMeter.setScale(SCALE);
 
-    scene.currentReputation = scene.add.image(171, 69, "pauseSlider").setDepth(DEPTH.OVERLAYTEXT);
+    scene.currentReputation = scene.add.image(171, 69, "pauseSlider");
+    scene.currentReputation.setDepth(DEPTH.OVERLAYTEXT);
     scene.currentReputation.setScrollFactor(0);
     scene.currentReputation.setScale(SCALE - 0.14);
 
@@ -301,26 +302,11 @@ function createLevelOverlay(scene) {
         fontFamily: FONT,
         fontSize: '40px',
         fill: '#ffffff'
-    }).setDepth(DEPTH.OVERLAYTEXT);
+    })
+    scene.timerText.setDepth(DEPTH.OVERLAYTEXT);
     scene.timerText.setScrollFactor(0);
     scene.timerText.setStroke('black', 3);
     scene.timerText.setOrigin(0.5);
-
-}
-
-function createSounds(scene) {
-
-    scene.sound.add('dogAttackSound');
-    scene.sound.add('dogItemSound');
-    scene.sound.add('dogBarkSound');
-    scene.sound.add('dogDamagedSound');
-    scene.sound.add('dogDyingSound');
-    scene.sound.add('humanPunchSound');
-    scene.sound.add('humanDamagedSound');
-    scene.sound.add('humanDyingSound');
-    scene.sound.add('questSound');
-    scene.sound.add('levelWinSound');
-    scene.sound.add('levelLoseSound');
 
 }
 
@@ -345,7 +331,9 @@ function resetProgress() {
 
 function loseLevel(scene) {
 
-    scene.sound.play('levelLoseSound');
+    scene.sound.play('levelLoseSound', {
+        volume: SOUNDVOLUME
+    });
     scene.scene.pause();
     scene.scene.launch("FAILED");
     scene.scene.bringToTop("FAILED");
@@ -354,7 +342,9 @@ function loseLevel(scene) {
 
 function winLevel(scene) {
 
-    scene.sound.play('levelWinSound');
+    scene.sound.play('levelWinSound', {
+        volume: SOUNDVOLUME
+    });
     scene.scene.pause();
     scene.scene.launch("COMPLETE");
     scene.scene.bringToTop("COMPLETE");

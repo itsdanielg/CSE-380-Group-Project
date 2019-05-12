@@ -36,7 +36,7 @@ class pauseScene extends Phaser.Scene {
         var textY = 170;
         var textYOffset = 70;
         var soundX = (SOUNDVOLUME * 15.4) + 170;
-        var musicX = (MUSICVOLUME * 15.4) + 740;
+        var musicX = (MUSICVOLUME * ((1125 - 740)/3)) + 740;
 
         pauseBG.setOrigin(0);
         resumeButton.setPosition(textX, textY);
@@ -138,7 +138,8 @@ class pauseScene extends Phaser.Scene {
             if (this.x > 1125) {
                 this.x = 1125;
             }
-            MUSICVOLUME = (this.x - 740) / 15.4;
+            MUSICVOLUME = (this.x - 740) / ((1125 - 740)/3);
+            MUSIC.setVolume(MUSICVOLUME);
         });
 
     }

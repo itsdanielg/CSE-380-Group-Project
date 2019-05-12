@@ -35,8 +35,8 @@ class levelOneScene extends Phaser.Scene {
         // Set variables (SAME FOR EVERY LEVEL)
 
         PLAYERHEALTH = 500;
-        HUMANDAMAGE = 50 + Math.ceil(progress.REPUTATION * 0.4);
-        DOGDAMAGE = 20 + Math.ceil(progress.REPUTATION * 0.4);
+        HUMANDAMAGE = BASEHUMANDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
+        DOGDAMAGE = BASEDOGDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
 
         // Overlay (THE SAME FOR EVERY LEVEL)
 
@@ -74,7 +74,7 @@ class levelOneScene extends Phaser.Scene {
 
         var menuScene = this.scene.get("MENU");
         for (var i = 0; i < menuScene.allDogs.length; i++) {
-            createAnimations(i, this);
+            createDogAnimations(i, this);
         }
         createGoodGuyAnimations(this);
         createBadGuyAnimations(this);
@@ -135,10 +135,6 @@ class levelOneScene extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.player);
 
-        // Sounds (THE SAME FOR EVERY LEVEL)
-
-        createSounds(this);
-
         // Timer (THE SAME FOR EVERY LEVEL)
     
         // Timer decreases when reputation is higher, and the opposite when lower
@@ -155,7 +151,7 @@ class levelOneScene extends Phaser.Scene {
 
         // ALL METHODS THE SAME FOR EVERY LEVEL
 
-        // Listen for pause event
+        // Listen for pause event (if player pauses)
 
         pauseEvent(this);
 
@@ -204,10 +200,6 @@ class levelOneScene extends Phaser.Scene {
         // Update Timer
 
         updateTimer(this);
-
-        // Update Volume
-        
-        this.sound.setVolume(SOUNDVOLUME);
 
     }
 
@@ -261,7 +253,9 @@ class levelOneScene extends Phaser.Scene {
                     if (questStatus == "INCOMPLETE") {
                         this.quests[i].questStatus = "COMPLETE";
                         questText.setFill(GOODQUESTFILL);
-                        this.sound.play('questSound');
+                        this.sound.play('questSound', {
+                            volume: SOUNDVOLUME
+                        });
                         this.questsCompleted++;
                         changeReputation(20);
                         break;
@@ -277,7 +271,9 @@ class levelOneScene extends Phaser.Scene {
                     if (questStatus == "INCOMPLETE") {
                         this.quests[i].questStatus = "COMPLETE";
                         questText.setFill(GOODQUESTFILL);
-                        this.sound.play('questSound');
+                        this.sound.play('questSound', {
+                            volume: SOUNDVOLUME
+                        });
                         this.questsCompleted++;
                         changeReputation(20);
                         break;
