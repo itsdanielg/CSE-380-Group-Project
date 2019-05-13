@@ -11,7 +11,7 @@ class failScene extends Phaser.Scene {
         // Add images/buttons
 
         var failedBG = this.add.image(0, 0, "failedBG").setDepth(-1);
-        var retryButton = this.add.image(0, 0, "completeContinue");
+        var retryButton = this.add.image(0, 0, "failedRetry");
         var exitButton = this.add.image(0, 0, "cheatExit");
 
         // Scale Buttons
