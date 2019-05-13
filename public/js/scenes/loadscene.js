@@ -116,7 +116,7 @@ class loadScene extends Phaser.Scene {
         this.load.audio('questSound', 'assets/sounds/quest.mp3');
         this.load.audio('levelWinSound', 'assets/sounds/level_win.mp3');
         this.load.audio('levelLoseSound', 'assets/sounds/level_lose.mp3');
-        this.load.audio('bgMusic', 'assets/music/wAybAck.mp3');
+        this.load.audio('bgMusic', 'assets/music/wayback.mp3');
         
         // Progress Bar
 
