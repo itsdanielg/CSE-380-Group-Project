@@ -53,9 +53,16 @@ class cheatScene extends Phaser.Scene {
         })
         submitButton.on("pointerup", () => {
             INVINCIBLE = this.invincible;
-            this.scene.stop("PAUSE");
-            this.scene.stop(progress.CURRENTLEVEL);
-            this.scene.start(this.nextLevel);
+            if (this.nextLevel != "") {
+                this.scene.stop("PAUSE");
+                this.scene.stop(progress.CURRENTLEVEL);
+                this.scene.start(this.nextLevel);
+            }
+            else {
+                this.scene.stop();
+                this.scene.stop("PAUSE");
+                this.scene.resume(progress.CURRENTLEVEL);
+            }
         })
         
         exitButton.setInteractive({useHandCursor: true});    
