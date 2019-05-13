@@ -12,26 +12,128 @@ function createNPC(npc, scene, health) {
     healthBar.fillRect(-40, -80, 80, 20);
     scene.npcs.push({
         npc: arcadeNPC,
+        direction: "DOWN",
         health: health,
         maxHealth: health,
         healthBox: healthBox,
-        healthBar: healthBar
+        healthBar: healthBar,
+        busy: false,
+        attacked: false,
+        reloading: false,
+        chasing: true
     });
     return arcadeNPC;
 }
 
-function updateNPCMovement(scene, npc){
-    var move = Math.floor(Math.random() * 30);
-    if (move < 1) {
-        var direction = Math.floor(Math.random() * 4);
-        var xVel = 0;
-        var yVel = 0;
-        npc.body.setVelocityX(xVel);
-        npc.body.setVelocityY(yVel);
-        xVel = VELOCITY - 150;
-        yVel = VELOCITY - 150;
-        if (direction == 0) {
-            npc.body.setVelocityX(-xVel);
+function updateNPCMovement(scene, npc, npcFile){
+    if (!npcFile.busy) {
+        var move = Math.floor(Math.random() * 30);
+        if (move < 1) {
+            var direction = Math.floor(Math.random() * 4);
+            var xVel = 0;
+            var yVel = 0;
+            npc.body.setVelocity(0);
+            xVel = VELOCITY - 150;
+            yVel = VELOCITY - 150;
+            if (direction == 0) {
+                npc.body.setVelocityX(-xVel);
+                npcFile.direction = "LEFT";
+            }
+            else if (direction == 1) {
+                npc.body.setVelocityX(xVel);
+                npcFile.direction = "RIGHT";
+            }
+            else if (direction == 2) {
+                npc.body.setVelocityY(-yVel);
+                npcFile.direction = "UP";
+            }
+            else {
+                npc.body.setVelocityY(yVel);
+                npcFile.direction = "DOWN";
+            }
+        }
+    }
+}
+
+
+function updateEnemyActions(scene, npcFile) {
+
+    var npcAttacked = npcFile.attacked;
+    if (npcAttacked) {
+        var npc = npcFile.npc;
+        var player = scene.player;
+        var playerX = player.x;
+        var playerY = player.y;
+        var npcSpeed = VELOCITY + 20;
+        scene.physics.moveTo(npc, playerX, playerY, npcSpeed);
+        var npcCenterX = npc.getCenter().x;
+        var npcCenterY = npc.getCenter().y;
+        var playerCenterX = player.getCenter().x;
+        var playerCenterY = player.getCenter().y;
+        var distanceX = Math.abs(npcCenterX - playerCenterX);
+        var distanceY = Math.abs(npcCenterY - playerCenterY);
+        if (distanceX >= distanceY) {
+            if (playerCenterX < npcCenterX) {
+                npcFile.direction = "LEFT"
+            }
+            else {
+                npcFile.direction = "RIGHT"
+            }
+        }
+        else {
+            if (playerCenterY < npcCenterY) {
+                npcFile.direction = "UP"
+            }
+            else {
+                npcFile.direction = "DOWN"
+            }
+        }
+        if (isInRange(player, npcFile, scene)) {
+            npcFile.chasing = false;
+            npc.body.setVelocity(0);
+            if (!npcFile.reloading) {
+                attackEvent(scene, player, npc, 1);
+                updateEnemyFrames(scene, npcFile);
+                npcFile.reloading = true;
+                scene.time.delayedCall(800/ENEMYATTACKSPEED, function() {
+                    npcFile.reloading = false;
+                });
+            }
+        }
+        else {
+            npcFile.chasing = true;
+            updateEnemyFrames(scene, npcFile);
+        }
+    }
+
+}
+
+function updateEnemyFrames(scene, npcFile) {
+
+    var npc = npcFile.npc;
+    var direction = npcFile.direction;
+    var attacked = npcFile.attacked;
+    if (direction == "LEFT") {
+        if (!npcFile.chasing) {
+            if (!npcFile.reloading) {
+                if (npc.texture.key == 'badguy') {
+                    npc.anims.play('bgAttackLeft', true);
+                }
+                else if (npc.texture.key == 'pistachio') {
+                    npc.anims.play('0attackLeft', true);
+                }
+                else if (npc.texture.key == 'spot') {
+                    npc.anims.play('1attackLeft', true);
+                }
+                else if (npc.texture.key == 'bear') {
+                    npc.anims.play('2attackLeft', true);
+                }
+                else {
+                    npc.anims.play('ggAttackLeft', true);
+                }
+            }
+        }
+        else {
             if (npc.texture.key == 'badguy') {
                 npc.anims.play('bgMoveLeft', true);
             }
@@ -48,8 +150,28 @@ function updateNPCMovement(scene, npc){
                 npc.anims.play('ggMoveLeft', true);
             }
         }
-        else if (direction == 1) {
-            npc.body.setVelocityX(xVel);
+    }
+    else if (direction == "RIGHT") {
+        if (!npcFile.chasing) {
+            if (!npcFile.reloading) {
+                if (npc.texture.key == 'badguy') {
+                    npc.anims.play('bgAttackRight', true);
+                }
+                else if (npc.texture.key == 'pistachio') {
+                    npc.anims.play('0attackRight', true);
+                }
+                else if (npc.texture.key == 'spot') {
+                    npc.anims.play('1attackRight', true);
+                }
+                else if (npc.texture.key == 'bear') {
+                    npc.anims.play('2attackRight', true);
+                }
+                else {
+                    npc.anims.play('ggAttackRight', true);
+                }
+            }
+        }
+        else {
             if (npc.texture.key == 'badguy') {
                 npc.anims.play('bgMoveRight', true);
             }
@@ -66,8 +188,28 @@ function updateNPCMovement(scene, npc){
                 npc.anims.play('ggMoveRight', true);
             }
         }
-        else if (direction == 2) {
-            npc.body.setVelocityY(-yVel);
+    }
+    else if (direction == "UP") {
+        if (!npcFile.chasing) {
+            if (!npcFile.reloading) {
+                if (npc.texture.key == 'badguy') {
+                    npc.anims.play('bgAttackUp', true);
+                }
+                else if (npc.texture.key == 'pistachio') {
+                    npc.anims.play('0attackUp', true);
+                }
+                else if (npc.texture.key == 'spot') {
+                    npc.anims.play('1attackUp', true);
+                }
+                else if (npc.texture.key == 'bear') {
+                    npc.anims.play('2attackUp', true);
+                }
+                else {
+                    npc.anims.play('ggAttackUp', true);
+                }
+            }
+        }
+        else {
             if (npc.texture.key == 'badguy') {
                 npc.anims.play('bgMoveUp', true);
             }
@@ -84,8 +226,28 @@ function updateNPCMovement(scene, npc){
                 npc.anims.play('ggMoveUp', true);
             }
         }
+    }
+    else {
+        if (!npcFile.chasing) {
+            if (!npcFile.reloading) {
+                if (npc.texture.key == 'badguy') {
+                    npc.anims.play('bgAttackDown', true);
+                }
+                else if (npc.texture.key == 'pistachio') {
+                    npc.anims.play('0attackDown', true);
+                }
+                else if (npc.texture.key == 'spot') {
+                    npc.anims.play('1attackDown', true);
+                }
+                else if (npc.texture.key == 'bear') {
+                    npc.anims.play('2attackDown', true);
+                }
+                else {
+                    npc.anims.play('ggAttackDown', true);
+                }
+            }
+        }
         else {
-            npc.body.setVelocityY(yVel);
             if (npc.texture.key == 'badguy') {
                 npc.anims.play('bgMoveDown', true);
             }
@@ -103,10 +265,6 @@ function updateNPCMovement(scene, npc){
             }
         }
     }
-}
-
-
-function updateEnemyActions(scene, npc){
 
 }
 
@@ -126,17 +284,22 @@ function updateEnemyHealth(npc, health, maxHealth, healthBox, healthBar) {
 
 }
 
+function processNPCEscape() {
+    
+}
+
 function processNPCDeath(npcFile, scene) {
 
     var npc = npcFile.npc;
     var healthBox = npcFile.healthBox;
     var healthBar = npcFile.healthBar;
-    npc.setVelocityX(0);
-    npc.setVelocityY(0);
+    npc.body.setVelocity(0);
     if (npc.texture.key == 'badguy') {
         npc.anims.play('bgDying', true);
         npc.on('animationcomplete', function () {
-            scene.sound.play('humanDyingSound');
+            scene.sound.play('humanDyingSound', {
+                volume: SOUNDVOLUME
+            });
             npc.destroy();
             healthBox.destroy();
             healthBar.destroy();
@@ -192,5 +355,17 @@ function processNPCDeath(npcFile, scene) {
             progress.REPUTATION -= 10;
         }, scene);
     }
+
+}
+
+function isInRange(player, npcFile, scene) {
+
+    var playerBounds = player.getBounds();
+    var npc = npcFile.npc;
+    var npcBounds = npc.getBounds();
+    if (Phaser.Geom.Intersects.RectangleToRectangle(playerBounds, npcBounds)) {
+        return true;
+    }
+    return false;
 
 }

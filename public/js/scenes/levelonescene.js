@@ -37,6 +37,8 @@ class levelOneScene extends Phaser.Scene {
         PLAYERHEALTH = 500;
         HUMANDAMAGE = BASEHUMANDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
         DOGDAMAGE = BASEDOGDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
+        ENEMYATTACKSPEED = BASEATTACKSPEED + Math.ceil(progress.REPUTATION * 0.01);
+        ENEMYATTACKFRAMERATE = (ANIMATION_FRAME_RATE + 10) * ENEMYATTACKSPEED;
 
         // Overlay (THE SAME FOR EVERY LEVEL)
 
@@ -169,7 +171,7 @@ class levelOneScene extends Phaser.Scene {
 
         // Update player health
 
-        updatePlayerHealth(this.healthBox, this.healthBar, this.player);
+        updatePlayerHealth(this, this.healthBox, this.healthBar, this.player);
 
         // Move NPCS and listen for NPC actions
 
@@ -184,8 +186,8 @@ class levelOneScene extends Phaser.Scene {
                 this.npcs.splice(i, 1);
                 processNPCDeath(npcFile, this);
             }
-            updateNPCMovement(this, npc);
-            updateEnemyActions(this, npc);
+            updateNPCMovement(this, npc, npcFile);
+            updateEnemyActions(this, npcFile);
             updateEnemyHealth(npc, health, maxHealth, healthBox, healthBar);
         }
 

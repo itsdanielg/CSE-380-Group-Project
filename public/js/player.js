@@ -1,6 +1,6 @@
 var DOGINDEX = 0;
 var INVINCIBLE = false;
-var PLAYERHEALTH = 500;
+var PLAYERHEALTH = BASEPLAYERHEALTH;
 
 var LASTKEY = 3;
 var ANIMATIONPLAYING = false;
@@ -89,10 +89,14 @@ function updatePlayerMovement(player, scene) {
 
 }
 
-function updatePlayerHealth(healthBox, healthBar, player) {
+function updatePlayerHealth(scene, healthBox, healthBar, player) {
 
     if (PLAYERHEALTH <= 0) {
         PLAYERHEALTH = 0;
+        processPlayerDeath(player, scene);
+    }
+    if (PLAYERHEALTH >= BASEPLAYERHEALTH) {
+        PLAYERHEALTH = BASEPLAYERHEALTH;
     }
     var health = (PLAYERHEALTH / 500) * 128;
     healthBar.clear();
@@ -134,7 +138,9 @@ function updatePlayerActions(player, scene) {
         }
         var npc = processPlayerDirection(player, scene);
         if (npc != null) {
-            attackEvent(player, npc, 0, this);
+            attackEvent(scene, player, npc, 0);
+            npc.attacked = true;
+            npc.busy = true;
         }
     }
 
@@ -151,12 +157,13 @@ function updatePlayerActions(player, scene) {
                 });
                 scene.items.splice(i, 1);
                 changeReputation(1);
+                PLAYERHEALTH += 10;
                 break;
             }
         }
         
     }
-    
+
     if (scene.input.keyboard.addKey('L').isDown) {
         scene.input.keyboard.removeKey('L');
         scene.sound.play('dogBarkSound', {
@@ -181,6 +188,12 @@ function updatePlayerActions(player, scene) {
             player.anims.play(DOGINDEX + "barkDown");
             player.on('animationcomplete', animationComplete, this);
             ANIMATIONPLAYING = true;
+        }
+        var npc = processPlayerDirection(player, scene);
+        if (npc != null) {
+            barkEvent(player, npc, scene);
+            npc.attacked = false;
+            npc.busy = true;
         }
     }
 
@@ -220,5 +233,38 @@ function processPlayerDirection(player, scene) {
         }
     }
     return null;
+
+}
+
+function processPlayerDeath(player, scene) {
+
+    player.body.setVelocity(0);
+    if (player.texture.key == 'pistachio') {
+        player.anims.play('0dying', true);
+        player.on('animationcomplete', function () {
+            scene.sound.play('dogDyingSound', {
+                volume: SOUNDVOLUME
+            });
+            loseLevel(scene);
+        }, scene);
+    }
+    else if (player.texture.key == 'spot') {
+        player.anims.play('1dying', true);
+        player.on('animationcomplete', function () {
+            scene.sound.play('dogDyingSound', {
+                volume: SOUNDVOLUME
+            });
+            loseLevel(scene);
+        }, scene);
+    }
+    else {
+        player.anims.play('2dying', true);
+        player.on('animationcomplete', function () {
+            scene.sound.play('dogDyingSound', {
+                volume: SOUNDVOLUME
+            });
+            loseLevel(scene);
+        }, scene);
+    }
 
 }

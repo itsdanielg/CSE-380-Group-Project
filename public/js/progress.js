@@ -72,42 +72,42 @@ function createDogAnimations(dogIndex, scene) {
     scene.anims.create({
         key: dogIndex + 'attackDown',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 24, end: 28 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: dogIndex + 'attackUp',
         frames: [ { key: dogKey, frame: 30 } ],
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: dogIndex + 'attackLeft',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 36, end: 41 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: dogIndex + 'attackRight',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 42, end: 47 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: dogIndex + 'barkDown',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 48, end: 51 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: dogIndex + 'barkUp',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 54, end: 55 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: dogIndex + 'barkLeft',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 60, end: 61 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: dogIndex + 'barkRight',
         frames: scene.anims.generateFrameNumbers(dogKey, { start: 66, end: 67 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: dogIndex + 'dying',
@@ -166,22 +166,22 @@ function createGoodGuyAnimations(scene) {
     scene.anims.create({
         key: 'ggAttackDown',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 36, end: 38 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: 'ggAttackUp',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 45, end: 47 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: 'ggAttackLeft',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 54, end: 62 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: 'ggAttackRight',
         frames: scene.anims.generateFrameNumbers('goodguy', { start: 63, end: 71 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: 'ggDying',
@@ -238,22 +238,22 @@ function createBadGuyAnimations(scene) {
     scene.anims.create({
         key: 'bgAttackDown',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 36, end: 38 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: 'bgAttackUp',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 45, end: 47 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: 'bgAttackLeft',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 54, end: 62 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: 'bgAttackRight',
         frames: scene.anims.generateFrameNumbers('badguy', { start: 63, end: 71 }),
-        frameRate: ANIMATION_FRAME_RATE + 10
+        frameRate: ENEMYATTACKFRAMERATE
     });
     scene.anims.create({
         key: 'bgDying',
