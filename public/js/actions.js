@@ -220,6 +220,5 @@ function barkEvent(player, npcFile, scene) {
             }, [], this);
         }
     }
-    //scene.npcs.splice(scene.npcs.indexOf(npcFile), 1);
 
 }
