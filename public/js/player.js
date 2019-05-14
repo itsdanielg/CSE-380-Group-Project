@@ -10,7 +10,7 @@ function createPlayer(scene, spawnX, spawnY) {
     scene.player = scene.physics.add.sprite(spawnX, spawnY, getDog(DOGINDEX)).setDepth(DEPTH.SPRITE);
     scene.physics.add.collider(scene.player, scene.collisionLayer);
     scene.player.body.setCollideWorldBounds(true);
-    scene.player.body.setSize(80, 70);
+    scene.player.body.setSize(112, 80);
 
     scene.healthBox = scene.add.graphics().setDepth(DEPTH.HEALTHBAR);
     scene.healthBox.fillStyle(0xff0000);
@@ -154,11 +154,11 @@ function updatePlayerActions(player, scene) {
             player.on('animationcomplete', animationComplete, scene);
             ANIMATIONPLAYING = true;
         }
-        var npc = processPlayerDirection(player, scene);
-        if (npc != null) {
-            attackEvent(scene, player, npc, 0);
-            npc.attacked = true;
-            npc.busy = true;
+        var npcFile = processPlayerDirection(player, scene);
+        if (npcFile != null) {
+            attackEvent(scene, player, npcFile, 0);
+            npcFile.attacked = true;
+            npcFile.busy = true;
         }
     }
 
@@ -207,11 +207,11 @@ function updatePlayerActions(player, scene) {
             player.on('animationcomplete', animationComplete, this);
             ANIMATIONPLAYING = true;
         }
-        var npc = processPlayerDirection(player, scene);
-        if (npc != null) {
-            barkEvent(player, npc, scene);
-            npc.attacked = false;
-            npc.busy = true;
+        var npcFile = processPlayerDirection(player, scene);
+        if (npcFile != null) {
+            barkEvent(scene, npcFile);
+            npcFile.attacked = false;
+            npcFile.busy = true;
         }
     }
 

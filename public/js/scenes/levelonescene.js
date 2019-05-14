@@ -7,10 +7,16 @@ class levelOneScene extends Phaser.Scene {
         this.player = null;
         this.healthBox = null;
         this.healthBar = null;
-        this.npcs = [];
+        this.mapSize = [];
         this.collisionLayer = null;
+        this.npcs = [];
         this.items = [];
         this.quests = [];
+        this.totalBadGuys = 0;
+        this.totalGoodGuys = 0;
+        this.totalDogs = 0;
+        this.totalItems = 0;
+        this.totalQuests = 0;
         this.questsCompleted = 0;
         this.currentReputation = null;
         this.seconds = 0;
@@ -22,6 +28,7 @@ class levelOneScene extends Phaser.Scene {
 
         // Reset Level
 
+        this.mapSize.length = 0;
         this.npcs.length = 0;
         this.items.length = 0;
         this.quests.length = 0;
@@ -32,7 +39,7 @@ class levelOneScene extends Phaser.Scene {
         progress.CURRENTLEVEL = "LEVELONE" 
         progress.CURRENTLEVELINDEX = 0;
 
-        // Set variables (SAME FOR EVERY LEVEL)
+        // Set variables (SAME FOR EVERY LEVEL; ACTUAL VALUES CHANGE BASED ON CURRENT REPUTATION)
 
         PLAYERHEALTH = BASEPLAYERHEALTH;
         HUMANDAMAGE = BASEHUMANDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
@@ -48,8 +55,11 @@ class levelOneScene extends Phaser.Scene {
         
         var map = this.make.tilemap({ key: 'levelOneMap' });
         var tileset = map.addTilesetImage("citytileset", 'cityTiles');
-        map.createStaticLayer("Background", tileset, 0, 0).setDepth(DEPTH.BACKGROUND);
-        this.collisionLayer = map.createStaticLayer("Collision", tileset, 0, 0).setDepth(DEPTH.COLLISION);
+        var background = map.createStaticLayer("Background", tileset, 0, 0);
+        this.collisionLayer = map.createStaticLayer("Collision", tileset, 0, 0);
+        this.mapSize = [map.widthInPixels, map.heightInPixels];
+        background.setDepth(DEPTH.BACKGROUND);
+        this.collisionLayer.setDepth(DEPTH.COLLISION);
 
         // Objects (THE SAME FOR EVERY LEVEL)
 
@@ -64,8 +74,6 @@ class levelOneScene extends Phaser.Scene {
         var bears = map.createFromObjects('Dogs', 339, {key: 'bear'});
         var goodNPCs = map.createFromObjects('Goods', 21, {key: 'goodguy'});
         var badNPCs = map.createFromObjects('Bads', 102, {key: 'badguy'});
-        this.totalBadNPCs = badNPCs.length;
-        this.badNPCsLength = badNPCs.length;
 
         // Collisions (THE SAME FOR EVERY LEVEL)
 
@@ -96,16 +104,19 @@ class levelOneScene extends Phaser.Scene {
             var npc = createNPC(pistachios[i], this, 300);
             pistachios[i].destroy();
             npc.body.setSize(112, 80);
+            this.totalDogs++;
         }
         for (var i = 0; i < spots.length; i++) {
             var npc = createNPC(spots[i], this, 300);
             spots[i].destroy();
             npc.body.setSize(112, 80);
+            this.totalDogs++;
         }
         for (var i = 0; i < bears.length; i++) {
             var npc = createNPC(bears[i], this, 300);
             bears[i].destroy();
             npc.body.setSize(112, 80);
+            this.totalDogs++;
         }
 
         // Human NPC Sprites (THE SAME FOR EVERY LEVEL)
@@ -115,11 +126,13 @@ class levelOneScene extends Phaser.Scene {
             var npc = createNPC(goodNPCs[i], this, 500);
             goodNPCs[i].destroy();
             npc.body.setSize(48, 112);
+            this.totalGoodGuys++;
         }
         for (var i = 0; i < badNPCs.length; i++) {
             var npc = createNPC(badNPCs[i], this, 500);
             badNPCs[i].destroy();
             npc.body.setSize(48, 112);
+            this.totalBadGuys++;
         }
 
         // Item Sprites (THE SAME FOR EVERY LEVEL)
@@ -182,6 +195,7 @@ class levelOneScene extends Phaser.Scene {
             var maxHealth = npcFile.maxHealth;
             var healthBox = npcFile.healthBox;
             var healthBar = npcFile.healthBar;
+            processNPCEscape(this, npcFile);
             if (health <= 0) {
                 processNPCDeath(npcFile, this);
                 this.npcs.splice(i, 1);
@@ -209,7 +223,7 @@ class levelOneScene extends Phaser.Scene {
 
     createQuests() {
 
-        var questOne = this.add.text(QUESTX + 20, QUESTY + 20, "• Collect all trash (0/50 collected)", {
+        var questOne = this.add.text(QUESTX + 20, QUESTY + 20, "• Collect all trash (0/" + this.totalItems + " collected)", {
             fontFamily: FONT,
             fontSize: '28px',
             fill: '#ffffff'
@@ -222,7 +236,7 @@ class levelOneScene extends Phaser.Scene {
             questStatus: "INCOMPLETE"
         });
 
-        var questTwo = this.add.text(QUESTX + 20, QUESTY + 100, "• Get rid of the\nbad guys\n(0/5 gone)", {
+        var questTwo = this.add.text(QUESTX + 20, QUESTY + 100, "• Get rid of the bad guys (0/" + this.totalBadGuys + " gone)", {
             fontFamily: FONT,
             fontSize: '28px',
             fill: '#ffffff'
@@ -267,9 +281,16 @@ class levelOneScene extends Phaser.Scene {
             }
 
             else if (i == 1) {
-                var badGuysGone = this.totalBadNPCs - (this.badNPCsLength);
-                questText.setText("• Get rid of the bad guys (" + badGuysGone + "/5 gone)");
-                if (badGuysGone == this.totalBadNPCs) {
+                var badGuysRemaining = 0;
+                for (var i = 0; i < this.npcs.length; i++) {
+                    var npc = this.npcs[i].npc;
+                    if (npc.texture.key == "badguy") {
+                        badGuysRemaining++;
+                    }
+                }
+                var badGuysGone = this.totalBadGuys - badGuysRemaining;
+                questText.setText("• Get rid of the bad guys (" + badGuysGone + "/" + this.totalBadGuys + " gone)");
+                if (badGuysGone == this.totalBadGuys) {
                     if (questStatus == "INCOMPLETE") {
                         this.quests[i].questStatus = "COMPLETE";
                         questText.setFill(GOODQUESTFILL);

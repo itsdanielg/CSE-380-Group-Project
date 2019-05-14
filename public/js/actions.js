@@ -46,7 +46,7 @@ function attackEvent(scene, player, npc, event) {
 
 }
 
-function barkEvent(player, npcFile, scene) {
+function barkEvent(scene, npcFile) {
 
     var npc = npcFile.npc;
     npc.body.setCollideWorldBounds(false);
@@ -58,10 +58,12 @@ function barkEvent(player, npcFile, scene) {
     yVel = VELOCITY + 200;
     if (LASTKEY == 0) {
         if (npc.texture.key == 'badguy') {
+            npcFile.direction = "LEFT";
             npc.body.setVelocityX(-xVel);
             npc.anims.play('bgMoveLeft', true);
         }
-        else if (npc.texture.key == 'goodguy'){
+        else if (npc.texture.key == 'goodguy') {
+            npcFile.direction = "LEFT";
             npc.body.setVelocityX(-xVel);
             npc.anims.play('ggMoveLeft', true);
             changeReputation(-2);
@@ -99,10 +101,12 @@ function barkEvent(player, npcFile, scene) {
     }
     else if (LASTKEY == 1) {
         if (npc.texture.key == 'badguy') {
+            npcFile.direction = "RIGHT";
             npc.body.setVelocityX(xVel);
             npc.anims.play('bgMoveRight', true);
         }
-        else if (npc.texture.key == 'goodguy'){
+        else if (npc.texture.key == 'goodguy') {
+            npcFile.direction = "RIGHT";
             npc.body.setVelocityX(xVel);
             npc.anims.play('ggMoveRight', true);
             changeReputation(-2);
@@ -140,10 +144,12 @@ function barkEvent(player, npcFile, scene) {
     }
     else if (LASTKEY == 2) {
         if (npc.texture.key == 'badguy') {
+            npcFile.direction = "UP";
             npc.body.setVelocityY(-yVel);
             npc.anims.play('bgMoveUp', true);
         }
-        else if (npc.texture.key == 'goodguy'){
+        else if (npc.texture.key == 'goodguy') {
+            npcFile.direction = "UP";
             npc.body.setVelocityY(-yVel);
             npc.anims.play('ggMoveUp', true);
             changeReputation(-2);
@@ -181,10 +187,12 @@ function barkEvent(player, npcFile, scene) {
     }
     else {
         if (npc.texture.key == 'badguy') {
+            npcFile.direction = "DOWN";
             npc.body.setVelocityY(yVel);
             npc.anims.play('bgMoveDown', true);
         }
-        else if (npc.texture.key == 'goodguy'){
+        else if (npc.texture.key == 'goodguy') {
+            npcFile.direction = "DOWN";
             npc.body.setVelocityY(yVel);
             npc.anims.play('ggMoveDown', true);
             changeReputation(-2);

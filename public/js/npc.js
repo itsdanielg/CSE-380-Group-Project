@@ -284,8 +284,32 @@ function updateEnemyHealth(npc, health, maxHealth, healthBox, healthBar) {
 
 }
 
-function processNPCEscape() {
-    
+function processNPCEscape(scene, npcFile) {
+
+    var mapWidth = scene.mapSize[0];
+    var mapHeight = scene.mapSize[1];
+    var npc = npcFile.npc;
+    if (npcFile.direction == "LEFT") {
+        if (npc.x < -128) {
+            npcFile.health = -1;
+        }
+    }
+    else if (npcFile.direction == "RIGHT") { 
+        if (npc.x > mapWidth + 128) {
+            npcFile.health = 0;
+        }
+    }
+    else if (npcFile.direction == "UP") {
+        if (npc.y < -128) {
+            npcFile.health = 0;
+        }
+    }
+    else {
+        if (npc.y > mapHeight + 128) {
+            npcFile.health = 0;
+        }
+    }
+
 }
 
 function processNPCDeath(npcFile, scene) {
