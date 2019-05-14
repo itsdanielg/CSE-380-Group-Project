@@ -28,6 +28,19 @@ class levelOneScene extends Phaser.Scene {
         var tileset = [sidewalkTile, streetHoriztonalTile, streetIntersectionTile, streetVerticalTile];
         var backgroundLayer = map.createStaticLayer("Background", tileset, 0, 0).setDepth(-1);
         var collisionLayer = map.createStaticLayer("Collision", buildingTile, 0, 0);
+        // this.impassable = [];
+        // for(var i = 0; i < map.layers[1].data.length; i++) {
+        //     for (var j = 0; j < map.layers[1].data[0].length; j++) {
+        //         if (map.layers[1].data[i][j].index != -1) {
+        //             console.log(map.layers[1].data[i][j]);
+        //             var wall = this.physics.add.sprite(j * 128 + 16, i * 128 + 16);
+        //             wall.setOrigin(-1, -1);
+        //             wall.setSize(128, 128);
+        //             wall.body.immovable = true;
+        //             this.impassable.push(wall);
+        //         }
+        //     }
+        // }
 
         // Collisions
         collisionLayer.setCollisionByProperty({collides:true});
@@ -45,8 +58,11 @@ class levelOneScene extends Phaser.Scene {
 
         this.dogIndex = menuScene.dogIndex;
         this.player = this.physics.add.sprite(320, 320, 'dogs');
+        // this.physics.add.collider(this.player, this.impassable);
         this.physics.add.collider(this.player, collisionLayer);
         this.player.body.setCollideWorldBounds(true);
+        // this.player.body.setCircle(50, this.player.displayWidth / 2 - 50, this.player.displayHeight / 2 - 55);
+        this.player.setSize(80, 70);
 
         // NPC Sprites
 
@@ -68,14 +84,16 @@ class levelOneScene extends Phaser.Scene {
             this.physics.add.collider(npc, collisionLayer);
             npc.body.setCollideWorldBounds(true);
             npc.setImmovable();
+            npc.setSize(40, 70);
+            // npc.body.setCircle(50, this.player.displayWidth / 2 - 50, this.player.displayHeight / 2 - 55);
             if (this.physics.collide(npc, this.npcs)) {
-                console.log("COLLIDED WITH ANOTHER SPRITE")
+                console.log("COLLIDED WITH ANOTHER SPRITE");
             }
             else if (this.physics.collide(npc, this.player)) {
-                console.log("COLLIDED WITH PLAYER")
+                console.log("COLLIDED WITH PLAYER");
             }
             else if (this.physics.overlap(npc, buildingTile)) {
-                console.log("COLLIDED WITH BUILDING")
+                console.log("COLLIDED WITH BUILDING");
             }
             this.npcs.push(npc);
             
@@ -84,7 +102,7 @@ class levelOneScene extends Phaser.Scene {
         // Camera
 
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-        this.cameras.main.startFollow(this.player);
+        this.cameras.main.startFollow(this.player, true, 0.2, 0.2);
 
     }
 
@@ -157,32 +175,34 @@ class levelOneScene extends Phaser.Scene {
     }
     
     updatePlayerMovement() {
-        this.player.body.setVelocityX(0);
-        this.player.body.setVelocityY(0);
-
-        this.xVel = VELOCITY;
-        this.yVel = VELOCITY;
-
-        if (this.input.keyboard.addKey('SHIFT').isDown) {
-            this.xVel  *= 1.9;
-            this.yVel *= 1.9;
-        }
-        else {
-            this.xVel *= 1;
-            this.yVel *= 1;
-        }
+        this.xVel = 0;
+        this.yVel = 0;
     
         if (this.input.keyboard.addKey('A').isDown) {
-            this.player.body.setVelocityX(-this.xVel);
+            this.xVel -= 1;
         }
-        else if (this.input.keyboard.addKey('D').isDown) {
-            this.player.body.setVelocityX(this.xVel);
+        if (this.input.keyboard.addKey('D').isDown) {
+            this.xVel += 1;
         }
         if (this.input.keyboard.addKey('W').isDown) {
-            this.player.body.setVelocityY(-this.yVel);
+            this.yVel -= 1;
         }
-        else if (this.input.keyboard.addKey('S').isDown) {
-            this.player.body.setVelocityY(this.yVel);
+        if (this.input.keyboard.addKey('S').isDown) {
+            this.yVel += 1;
+        }
+
+        var normalise = Math.sqrt(this.yVel * this.yVel + this.xVel * this.xVel);
+        if(normalise != 0) {
+            if (this.input.keyboard.addKey('SHIFT').isDown) {
+                this.player.body.setVelocityX(this.xVel / normalise * 1.9 * VELOCITY);
+                this.player.body.setVelocityY(this.yVel / normalise * 1.9 * VELOCITY);
+            } else {
+                this.player.body.setVelocityX(this.xVel / normalise * VELOCITY);
+                this.player.body.setVelocityY(this.yVel / normalise * VELOCITY);
+            }
+        } else {
+            this.player.body.setVelocityX(0);
+            this.player.body.setVelocityY(0);
         }
     }
 
@@ -254,5 +274,4 @@ class levelOneScene extends Phaser.Scene {
             this.barked = false;
         }
     }
-
 }
