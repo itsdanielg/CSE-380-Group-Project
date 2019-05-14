@@ -34,7 +34,7 @@ class levelOneScene extends Phaser.Scene {
 
         // Set variables (SAME FOR EVERY LEVEL)
 
-        PLAYERHEALTH = 500;
+        PLAYERHEALTH = BASEPLAYERHEALTH;
         HUMANDAMAGE = BASEHUMANDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
         DOGDAMAGE = BASEDOGDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
         ENEMYATTACKSPEED = BASEATTACKSPEED + Math.ceil(progress.REPUTATION * 0.01);
@@ -54,16 +54,16 @@ class levelOneScene extends Phaser.Scene {
         // Objects (THE SAME FOR EVERY LEVEL)
 
         // Remove a line if that particular item does not exist in this map
-        var bananas = map.createFromObjects('Items', 11, {key: 'items', frame: 0});
-        var cigarettes = map.createFromObjects('Items', 12, {key: 'items', frame: 1});
-        var gumwrappers = map.createFromObjects('Items', 13, {key: 'items', frame: 2});
-        var bottles = map.createFromObjects('Items', 14, {key: 'items', frame: 3});
-        var cans = map.createFromObjects('Items', 15, {key: 'items', frame: 4});
-        var pistachios = map.createFromObjects('Dogs', 178, {key: 'pistachio'});
-        var spots = map.createFromObjects('Dogs', 256, {key: 'spot'});
-        var bears = map.createFromObjects('Dogs', 334, {key: 'bear'});
-        var goodNPCs = map.createFromObjects('Goods', 16, {key: 'goodguy'});
-        var badNPCs = map.createFromObjects('Bads', 97, {key: 'badguy'});
+        var bananas = map.createFromObjects('Items', 16, {key: 'items', frame: 0});
+        var cigarettes = map.createFromObjects('Items', 17, {key: 'items', frame: 1});
+        var gumwrappers = map.createFromObjects('Items', 18, {key: 'items', frame: 2});
+        var bottles = map.createFromObjects('Items', 19, {key: 'items', frame: 3});
+        var cans = map.createFromObjects('Items', 20, {key: 'items', frame: 4});
+        var pistachios = map.createFromObjects('Dogs', 183, {key: 'pistachio'});
+        var spots = map.createFromObjects('Dogs', 261, {key: 'spot'});
+        var bears = map.createFromObjects('Dogs', 339, {key: 'bear'});
+        var goodNPCs = map.createFromObjects('Goods', 21, {key: 'goodguy'});
+        var badNPCs = map.createFromObjects('Bads', 102, {key: 'badguy'});
         this.totalBadNPCs = badNPCs.length;
         this.badNPCsLength = badNPCs.length;
 
@@ -95,17 +95,17 @@ class levelOneScene extends Phaser.Scene {
         for (var i = 0; i < pistachios.length; i++) {
             var npc = createNPC(pistachios[i], this, 300);
             pistachios[i].destroy();
-            npc.body.setSize(80, 70);
+            npc.body.setSize(112, 80);
         }
         for (var i = 0; i < spots.length; i++) {
             var npc = createNPC(spots[i], this, 300);
             spots[i].destroy();
-            npc.body.setSize(80, 70);
+            npc.body.setSize(112, 80);
         }
         for (var i = 0; i < bears.length; i++) {
             var npc = createNPC(bears[i], this, 300);
             bears[i].destroy();
-            npc.body.setSize(80, 70);
+            npc.body.setSize(112, 80);
         }
 
         // Human NPC Sprites (THE SAME FOR EVERY LEVEL)
@@ -135,7 +135,7 @@ class levelOneScene extends Phaser.Scene {
         // Camera (THE SAME FOR EVERY LEVEL)
 
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
-        this.cameras.main.startFollow(this.player, true, 0.2, 0.2);
+        this.cameras.main.startFollow(this.player);
 
         // Timer (THE SAME FOR EVERY LEVEL)
     
@@ -183,8 +183,8 @@ class levelOneScene extends Phaser.Scene {
             var healthBox = npcFile.healthBox;
             var healthBar = npcFile.healthBar;
             if (health <= 0) {
-                this.npcs.splice(i, 1);
                 processNPCDeath(npcFile, this);
+                this.npcs.splice(i, 1);
             }
             updateNPCMovement(this, npc, npcFile);
             updateEnemyActions(this, npcFile);
@@ -286,4 +286,5 @@ class levelOneScene extends Phaser.Scene {
         }
 
     }
+
 }
