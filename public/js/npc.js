@@ -51,6 +51,7 @@ function updateNPCMovement(scene, npc, npcFile){
                 npc.body.setVelocityY(yVel);
                 npcFile.direction = "DOWN";
             }
+            updateEnemyFrames(scene, npcFile);
         }
     }
 }
@@ -112,7 +113,6 @@ function updateEnemyFrames(scene, npcFile) {
 
     var npc = npcFile.npc;
     var direction = npcFile.direction;
-    var attacked = npcFile.attacked;
     if (direction == "LEFT") {
         if (!npcFile.chasing) {
             if (!npcFile.reloading) {
