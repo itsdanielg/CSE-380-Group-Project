@@ -4,6 +4,7 @@ var PLAYERHEALTH = BASEPLAYERHEALTH;
 
 var LASTKEY = 3;
 var ANIMATIONPLAYING = false;
+var ITEMSCANCOLLECT = [0, 1, 2, 3, 4]
 
 function createPlayer(scene, spawnX, spawnY) {
 
@@ -169,14 +170,17 @@ function updatePlayerActions(player, scene) {
             var item = scene.items[i];
             var itemBounds = item.getBounds();
             if (Phaser.Geom.Intersects.RectangleToRectangle(playerBounds, itemBounds)) {
-                item.destroy();
-                scene.sound.play('dogItemSound', {
-                    volume: SOUNDVOLUME
-                });
-                scene.items.splice(i, 1);
-                changeReputation(1);
-                PLAYERHEALTH += 10;
-                break;
+                var itemType = item.frame.name;
+                if (ITEMSCANCOLLECT.includes(itemType)) {
+                    item.destroy();
+                    scene.sound.play('dogItemSound', {
+                        volume: SOUNDVOLUME
+                    });
+                    scene.items.splice(i, 1);
+                    changeReputation(1);
+                    PLAYERHEALTH += 10;
+                    break;
+                }
             }
         }
         

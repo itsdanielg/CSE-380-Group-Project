@@ -16,7 +16,6 @@ class levelOneScene extends Phaser.Scene {
         this.totalGoodGuys = 0;
         this.totalDogs = 0;
         this.totalItems = 0;
-        this.totalQuests = 0;
         this.questsCompleted = 0;
         this.currentReputation = null;
         this.seconds = 0;
@@ -28,10 +27,23 @@ class levelOneScene extends Phaser.Scene {
 
         // Reset Level
 
+        this.player = null;
+        this.healthBox = null;
+        this.healthBar = null;
         this.mapSize.length = 0;
+        this.collisionLayer = null;
         this.npcs.length = 0;
         this.items.length = 0;
         this.quests.length = 0;
+        this.totalBadGuys = 0;
+        this.totalGoodGuys = 0;
+        this.totalDogs = 0;
+        this.totalItems = 0;
+        this.questsCompleted = 0;
+        this.currentReputation = null;
+        this.seconds = 0;
+        this.timerText = "";
+        this.timer = null;
 
         // Set progress
 
@@ -46,6 +58,7 @@ class levelOneScene extends Phaser.Scene {
         DOGDAMAGE = BASEDOGDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
         ENEMYATTACKSPEED = BASEATTACKSPEED + Math.ceil(progress.REPUTATION * 0.01);
         ENEMYATTACKFRAMERATE = (ANIMATION_FRAME_RATE + 10) * ENEMYATTACKSPEED;
+        ITEMSCANCOLLECT = [0, 1, 2, 3, 4]
 
         // Overlay (THE SAME FOR EVERY LEVEL)
 
@@ -282,8 +295,8 @@ class levelOneScene extends Phaser.Scene {
 
             else if (i == 1) {
                 var badGuysRemaining = 0;
-                for (var i = 0; i < this.npcs.length; i++) {
-                    var npc = this.npcs[i].npc;
+                for (var j = 0; j < this.npcs.length; j++) {
+                    var npc = this.npcs[j].npc;
                     if (npc.texture.key == "badguy") {
                         badGuysRemaining++;
                     }

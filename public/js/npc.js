@@ -12,6 +12,8 @@ function createNPC(npc, scene, health) {
     healthBar.fillRect(-40, -80, 80, 20);
     scene.npcs.push({
         npc: arcadeNPC,
+        spawnX: arcadeNPC.body.x,
+        spawnY: arcadeNPC.body.y,
         direction: "DOWN",
         health: health,
         maxHealth: health,
@@ -291,22 +293,38 @@ function processNPCEscape(scene, npcFile) {
     var npc = npcFile.npc;
     if (npcFile.direction == "LEFT") {
         if (npc.x < -128) {
-            npcFile.health = -1;
+            npc.setPosition(npcFile.spawnX, npcFile.spawnY);
+            npc.body.setVelocity(0);
+            npc.body.setCollideWorldBounds(true);
+            npcFile.chasing = true;
+            npcFile.busy = false;
         }
     }
     else if (npcFile.direction == "RIGHT") { 
         if (npc.x > mapWidth + 128) {
-            npcFile.health = 0;
+            npc.setPosition(npcFile.spawnX, npcFile.spawnY);
+            npc.body.setVelocity(0);
+            npc.body.setCollideWorldBounds(true);
+            npcFile.chasing = true;
+            npcFile.busy = false;
         }
     }
     else if (npcFile.direction == "UP") {
         if (npc.y < -128) {
-            npcFile.health = 0;
+            npc.setPosition(npcFile.spawnX, npcFile.spawnY);
+            npc.body.setVelocity(0);
+            npc.body.setCollideWorldBounds(true);
+            npcFile.chasing = true;
+            npcFile.busy = false;
         }
     }
     else {
         if (npc.y > mapHeight + 128) {
-            npcFile.health = 0;
+            npc.setPosition(npcFile.spawnX, npcFile.spawnY);
+            npc.body.setVelocity(0);
+            npc.body.setCollideWorldBounds(true);
+            npcFile.chasing = true;
+            npcFile.busy = false;
         }
     }
 

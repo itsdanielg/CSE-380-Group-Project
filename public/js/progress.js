@@ -23,6 +23,17 @@ function getDog(dogIndex) {
     return dogKey;
 }
 
+function getTotalItems(scene, itemType) {
+    var count = 0;
+    for (var i = 0; i < scene.items.length; i++) {
+        var item = scene.items[i];
+        if (item.frame.name == itemType) {
+            count++;
+        }
+    }
+    return count;
+}
+
 function createDogAnimations(dogIndex, scene) {
     var dogKey = getDog(dogIndex);
     scene.anims.create({
