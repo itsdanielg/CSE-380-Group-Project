@@ -9,15 +9,19 @@
     "rewrites": [
       {
         "source": "/benchmark1",
-        "destination": "/gdd.html"
+        "destination": "/final/gdd.html"
       },
       {
         "source": "/benchmark2",
-        "destination": "/index.html"
+        "destination": "/benchmark2/index.html"
       },
       {
         "source": "/benchmark3",
-        "destination": "/index.html"
+        "destination": "/benchmark3/index.html"
+      },
+      {
+        "source": "**",
+        "destination": "/final/index.html"
       }
     ]
   }
