@@ -87,17 +87,17 @@ class levelTwoScene extends Phaser.Scene {
         for (var i = 0; i < pistachios.length; i++) {
             var npc = createNPC(pistachios[i], this, 300);
             pistachios[i].destroy();
-            npc.body.setSize(112, 80);
+            npc.body.setSize(80, 70);
         }
         for (var i = 0; i < spots.length; i++) {
             var npc = createNPC(spots[i], this, 300);
             spots[i].destroy();
-            npc.body.setSize(112, 80);
+            npc.body.setSize(80, 70);
         }
         for (var i = 0; i < bears.length; i++) {
             var npc = createNPC(bears[i], this, 300);
             bears[i].destroy();
-            npc.body.setSize(112, 80);
+            npc.body.setSize(80, 70);
         }
 
         // Human NPC Sprites (THE SAME FOR EVERY LEVEL)

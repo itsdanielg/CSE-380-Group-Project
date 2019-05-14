@@ -10,7 +10,7 @@ function createPlayer(scene, spawnX, spawnY) {
     scene.player = scene.physics.add.sprite(spawnX, spawnY, getDog(DOGINDEX)).setDepth(DEPTH.SPRITE);
     scene.physics.add.collider(scene.player, scene.collisionLayer);
     scene.player.body.setCollideWorldBounds(true);
-    scene.player.body.setSize(112, 80);
+    scene.player.body.setSize(80, 70);
 
     scene.healthBox = scene.add.graphics().setDepth(DEPTH.HEALTHBAR);
     scene.healthBox.fillStyle(0xff0000);
@@ -23,70 +23,78 @@ function createPlayer(scene, spawnX, spawnY) {
 }
 
 function updatePlayerFrames(player, scene) {
-
-    if (!ANIMATIONPLAYING) {
-        if (scene.input.keyboard.addKey('A').isDown) {
+    if (scene.input.keyboard.addKey('A').isDown) {
+        if(!ANIMATIONPLAYING)
             player.anims.play(DOGINDEX + 'moveLeft', true);
-            LASTKEY = 0;
-        }
-        else if (scene.input.keyboard.addKey('D').isDown) {
-            player.anims.play(DOGINDEX + 'moveRight', true);
-            LASTKEY = 1;
-        }
-        else if (scene.input.keyboard.addKey('W').isDown) {
-            player.anims.play(DOGINDEX + 'moveUp', true);
-            LASTKEY = 2;
-        }
-        else if (scene.input.keyboard.addKey('S').isDown) {
-            player.anims.play(DOGINDEX + 'moveDown', true);
-            LASTKEY = 3;
-        }
-        else if (LASTKEY == 0) {
-            player.anims.play(DOGINDEX + "moveLeftIdle");
-        }
-        else if (LASTKEY == 1) {
-            player.anims.play(DOGINDEX + "moveRightIdle");
-        }
-        else if (LASTKEY == 2) {
-            player.anims.play(DOGINDEX + "moveUpIdle");
-        }
-        else {
-            player.anims.play(DOGINDEX + "moveDownIdle");
-        }
+        LASTKEY = 0;
     }
-
+    else if (scene.input.keyboard.addKey('D').isDown) {
+        if(!ANIMATIONPLAYING)
+            player.anims.play(DOGINDEX + 'moveRight', true);
+        LASTKEY = 1;
+    }
+    else if (scene.input.keyboard.addKey('W').isDown) {
+        if(!ANIMATIONPLAYING)
+            player.anims.play(DOGINDEX + 'moveUp', true);
+        LASTKEY = 2;
+    }
+    else if (scene.input.keyboard.addKey('S').isDown) {
+        if(!ANIMATIONPLAYING)
+            player.anims.play(DOGINDEX + 'moveDown', true);
+        LASTKEY = 3;
+    }
+    else if (LASTKEY == 0) {
+        if(!ANIMATIONPLAYING)
+            player.anims.play(DOGINDEX + "moveLeftIdle");
+    }
+    else if (LASTKEY == 1) {
+        if(!ANIMATIONPLAYING)
+            player.anims.play(DOGINDEX + "moveRightIdle");
+    }
+    else if (LASTKEY == 2) {
+        if(!ANIMATIONPLAYING)
+            player.anims.play(DOGINDEX + "moveUpIdle");
+    }
+    else {
+        if(!ANIMATIONPLAYING)
+            player.anims.play(DOGINDEX + "moveDownIdle");
+    }
 }
 
 function updatePlayerMovement(player, scene) {
 
+    player.body.setVelocityX(0);
+    player.body.setVelocityY(0);
+
     var xVel = 0;
     var yVel = 0;
 
-    player.body.setVelocityX(xVel);
-    player.body.setVelocityY(yVel);
-
-    if (scene.input.keyboard.addKey('SHIFT').isDown) {
-        xVel = VELOCITY * 1.9;
-        yVel = VELOCITY * 1.9;
-    }
-    else {
-        xVel = VELOCITY;
-        yVel = VELOCITY;
-    }
-
     if (scene.input.keyboard.addKey('A').isDown) {
-        player.body.setVelocityX(-xVel);
+        xVel -= 1;
     }
-    else if (scene.input.keyboard.addKey('D').isDown) {
-        player.body.setVelocityX(xVel);
+    if (scene.input.keyboard.addKey('D').isDown) {
+        xVel += 1;
     }
     if (scene.input.keyboard.addKey('W').isDown) {
-        player.body.setVelocityY(-yVel);
+        yVel -= 1;
     }
-    else if (scene.input.keyboard.addKey('S').isDown) {
-        player.body.setVelocityY(yVel);
+    if (scene.input.keyboard.addKey('S').isDown) {
+        yVel += 1;
     }
 
+    var normalise = Math.sqrt(yVel * yVel + xVel * xVel);
+    if(normalise != 0) {
+        if (scene.input.keyboard.addKey('SHIFT').isDown) {
+            player.body.setVelocityX(xVel / normalise * 1.9 * VELOCITY);
+            player.body.setVelocityY(yVel / normalise * 1.9 * VELOCITY);
+        } else {
+            player.body.setVelocityX(xVel / normalise * VELOCITY);
+            player.body.setVelocityY(yVel / normalise * VELOCITY);
+        }
+    } else {
+        player.body.setVelocityX(0);
+        player.body.setVelocityY(0);
+    }
 }
 
 function updatePlayerHealth(scene, healthBox, healthBar, player) {
