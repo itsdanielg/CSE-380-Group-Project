@@ -34,10 +34,14 @@ class loadScene extends Phaser.Scene {
         this.load.image('levelSelectBG', 'assets/background/levelselect.png');
         this.load.image('controlsBG', 'assets/background/controls.png');
         this.load.image('helpBG', 'assets/background/help.png');
-        this.load.image('startButton', 'assets/buttons/start.png');
+        this.load.image('pauseBG', 'assets/background/pause.png');
+        this.load.image('cheatBG', 'assets/background/cheat.png');
+        this.load.image('completeBG', 'assets/background/complete.png');
+        this.load.image('failedBG', 'assets/background/failed.png');
 
         // Buttons
 
+        this.load.image('startButton', 'assets/buttons/start.png');
         this.load.image('levelSelectButton', 'assets/buttons/levelSelect.png');
         this.load.image('controlsButton', 'assets/buttons/controls.png');
         this.load.image('helpButton', 'assets/buttons/help.png');
@@ -50,6 +54,16 @@ class loadScene extends Phaser.Scene {
         this.load.image('levelFourButton', 'assets/buttons/lv4.png');
         this.load.image('levelFiveButton', 'assets/buttons/lv5.png');
         this.load.image('levelSixButton', 'assets/buttons/lv6.png');
+        this.load.image('pauseResume', 'assets/buttons/pauseresume.png');
+        this.load.image('pauseControl', 'assets/buttons/pausecontrol.png');
+        this.load.image('pauseSave', 'assets/buttons/pausesavenexit.png');
+        this.load.image('pauseExit', 'assets/buttons/pauseexit.png');
+        this.load.image('pauseSlider', 'assets/buttons/sliderbutton.png');
+        this.load.image('pauseCheats', 'assets/buttons/pausecheats.png');
+        this.load.image('cheatSubmit', 'assets/buttons/cheatsubmit.png');
+        this.load.image('cheatExit', 'assets/buttons/cheatexit.png');
+        this.load.image('completeContinue', 'assets/buttons/completecontinue.png');
+        this.load.image('failedRetry', 'assets/buttons/failedretry.png');
 
         // Dogs
 
@@ -68,29 +82,53 @@ class loadScene extends Phaser.Scene {
         this.load.image('currentLevelFour', 'assets/text/current4.png');
         this.load.image('currentLevelFive', 'assets/text/current5.png');
         this.load.image('currentLevelSix', 'assets/text/current6.png');
+        this.load.image('reputationMeter', 'assets/text/reputationmeter.png');
 
         // Spritesheets
 
-        this.load.spritesheet('dogs', 'assets/spritesheets/spritesheet.png', { frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet('pistachio', 'assets/spritesheets/pistachiospritesheet.png', { frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet('spot', 'assets/spritesheets/spotspritesheet.png', { frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet('bear', 'assets/spritesheets/bearspritesheet.png', { frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet('goodguy', 'assets/spritesheets/goodguyspritesheet.png', { frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet('badguy', 'assets/spritesheets/badguyspritesheet.png', { frameWidth: 128, frameHeight: 128 });
+        this.load.spritesheet('items', 'assets/spritesheets/itemspritesheet.png', { frameWidth: 64, frameHeight: 64 });
 
         // Tilemaps
 
-        this.load.image('sidewalk', 'assets/spritesheets/tiles/sidewalk.png');
-        this.load.image('streetHorizontal', 'assets/spritesheets/tiles/street_horizontal.png');
-        this.load.image('streetIntersection', 'assets/spritesheets/tiles/street_intersection.png');
-        this.load.image('streetVertical', 'assets/spritesheets/tiles/street_vertical.png');
-        this.load.image('building', 'assets/spritesheets/tiles/test.png');
-        this.load.tilemapTiledJSON("benchmark2Map", "assets/tilemaps/benchmark2.json");
+        this.load.image('cityTiles', 'assets/spritesheets/tilespritesheet.png');
+        this.load.tilemapTiledJSON("levelOneMap", "assets/tilemaps/levelone.json");
+        // this.load.tilemapTiledJSON("levelTwoMap", "assets/tilemaps/leveltwo.json");
+        // this.load.tilemapTiledJSON("levelThreeMap", "assets/tilemaps/levelthree.json");
+        // this.load.tilemapTiledJSON("levelFourMap", "assets/tilemaps/levelfour.json");
+        // this.load.tilemapTiledJSON("levelFiveMap", "assets/tilemaps/levelfive.json");
+        // this.load.tilemapTiledJSON("levelSixMap", "assets/tilemaps/levelsix.json");
 
+        // Sounds
+
+        this.load.audio('dogAttackSound', 'assets/sounds/attacking.mp3');
+        this.load.audio('dogItemSound', 'assets/sounds/item.mp3');
+        this.load.audio('dogBarkSound', 'assets/sounds/barking.mp3');
+        this.load.audio('dogDamagedSound', 'assets/sounds/damaged.mp3');
+        this.load.audio('dogDyingSound', 'assets/sounds/dying.mp3');
+        this.load.audio('humanPunchSound', 'assets/sounds/npc_punching.mp3');
+        this.load.audio('humanDamagedSound', 'assets/sounds/npc_damaged.mp3');
+        this.load.audio('humanDyingSound', 'assets/sounds/npc_dying.mp3');
+        this.load.audio('questSound', 'assets/sounds/quest.mp3');
+        this.load.audio('levelWinSound', 'assets/sounds/level_win.mp3');
+        this.load.audio('levelLoseSound', 'assets/sounds/level_lose.mp3');
+        this.load.audio('bgMusic', 'assets/music/wayback.mp3');
+        
         // Progress Bar
 
         this.load.on("progress", (percentage) => {
             loadingBar.fillRect(centerX - width/2, 670, width * percentage, height);
         })
-
         this.load.on("complete", () => {
-            loadingBox.destroy();
-            loadingBar.destroy();
+            MUSIC = this.sound.add("bgMusic", {
+                volume: MUSICVOLUME, 
+                loop: true
+            });
+            MUSIC.play();
             this.scene.start("MENU");
         });
 
