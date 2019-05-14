@@ -97,11 +97,11 @@ class loadScene extends Phaser.Scene {
 
         this.load.image('cityTiles', 'assets/spritesheets/tilespritesheet.png');
         this.load.tilemapTiledJSON("levelOneMap", "assets/tilemaps/levelone.json");
-        // this.load.tilemapTiledJSON("levelTwoMap", "assets/tilemaps/leveltwo.json");
-        // this.load.tilemapTiledJSON("levelThreeMap", "assets/tilemaps/levelthree.json");
+        this.load.tilemapTiledJSON("levelTwoMap", "assets/tilemaps/leveltwo.json");
+        this.load.tilemapTiledJSON("levelThreeMap", "assets/tilemaps/levelthree.json");
         this.load.tilemapTiledJSON("levelFourMap", "assets/tilemaps/levelfour.json");
-        // this.load.tilemapTiledJSON("levelFiveMap", "assets/tilemaps/levelfive.json");
-        // this.load.tilemapTiledJSON("levelSixMap", "assets/tilemaps/levelsix.json");
+        this.load.tilemapTiledJSON("levelFiveMap", "assets/tilemaps/levelfive.json");
+        this.load.tilemapTiledJSON("levelSixMap", "assets/tilemaps/levelsix.json");
 
         // Sounds
 

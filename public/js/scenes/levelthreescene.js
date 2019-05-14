@@ -5,10 +5,18 @@ class levelThreeScene extends Phaser.Scene {
             key: "LEVELTHREE"
         });
         this.player = null;
-        this.npcs = [];
+        this.healthBox = null;
+        this.healthBar = null;
+        this.mapSize = [];
         this.collisionLayer = null;
+        this.npcs = [];
         this.items = [];
         this.quests = [];
+        this.totalBadGuys = 0;
+        this.totalGoodGuys = 0;
+        this.totalDogs = 0;
+        this.totalItems = 0;
+        this.questsCompleted = 0;
         this.currentReputation = null;
         this.seconds = 0;
         this.timerText = "";
@@ -19,9 +27,23 @@ class levelThreeScene extends Phaser.Scene {
 
         // Reset Level
 
+        this.player = null;
+        this.healthBox = null;
+        this.healthBar = null;
+        this.mapSize.length = 0;
+        this.collisionLayer = null;
         this.npcs.length = 0;
         this.items.length = 0;
         this.quests.length = 0;
+        this.totalBadGuys = 0;
+        this.totalGoodGuys = 0;
+        this.totalDogs = 0;
+        this.totalItems = 0;
+        this.questsCompleted = 0;
+        this.currentReputation = null;
+        this.seconds = 0;
+        this.timerText = "";
+        this.timer = null;
 
         // Set progress
 
@@ -29,30 +51,42 @@ class levelThreeScene extends Phaser.Scene {
         progress.CURRENTLEVEL = "LEVELTHREE" 
         progress.CURRENTLEVELINDEX = 2;
 
+        // Set variables (SAME FOR EVERY LEVEL; ACTUAL VALUES CHANGE BASED ON CURRENT REPUTATION)
+
+        PLAYERHEALTH = BASEPLAYERHEALTH;
+        HUMANDAMAGE = BASEHUMANDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
+        DOGDAMAGE = BASEDOGDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
+        ENEMYATTACKSPEED = BASEATTACKSPEED + Math.ceil(progress.REPUTATION * 0.01);
+        ENEMYATTACKFRAMERATE = (ANIMATION_FRAME_RATE + 10) * ENEMYATTACKSPEED;
+        ITEMSCANCOLLECT = [0, 1, 2, 3, 4]
+
         // Overlay (THE SAME FOR EVERY LEVEL)
 
         createLevelOverlay(this);
 
         // Tilemap (THE SAME FOR EVERY LEVEL EXCEPT FOR MAP KEY)
         
-        var map = this.make.tilemap({ key: 'levelOneMap' });
+        var map = this.make.tilemap({ key: 'levelThreeMap' });
         var tileset = map.addTilesetImage("citytileset", 'cityTiles');
-        map.createStaticLayer("Background", tileset, 0, 0).setDepth(-1);
-        this.collisionLayer = map.createStaticLayer("Collision", tileset, 0, 0).setDepth(1);
+        var background = map.createStaticLayer("Background", tileset, 0, 0);
+        this.collisionLayer = map.createStaticLayer("Collision", tileset, 0, 0);
+        this.mapSize = [map.widthInPixels, map.heightInPixels];
+        background.setDepth(DEPTH.BACKGROUND);
+        this.collisionLayer.setDepth(DEPTH.COLLISION);
 
         // Objects (THE SAME FOR EVERY LEVEL)
 
         // Remove a line if that particular item does not exist in this map
-        var bananas = map.createFromObjects('Items', 11, {key: 'items', frame: 0});
-        var cigarettes = map.createFromObjects('Items', 12, {key: 'items', frame: 1});
-        var gumwrappers = map.createFromObjects('Items', 13, {key: 'items', frame: 2});
-        var bottles = map.createFromObjects('Items', 14, {key: 'items', frame: 3});
-        var cans = map.createFromObjects('Items', 15, {key: 'items', frame: 4});
-        var pistachios = map.createFromObjects('Dogs', 178, {key: 'pistachio'});
-        var spots = map.createFromObjects('Dogs', 256, {key: 'spot'});
-        var bears = map.createFromObjects('Dogs', 334, {key: 'bear'});
-        var goodNPCs = map.createFromObjects('Goods', 16, {key: 'goodguy'});
-        var badNPCs = map.createFromObjects('Bads', 97, {key: 'badguy'});
+        var bananas = map.createFromObjects('Items', 16, {key: 'items', frame: 0});
+        var cigarettes = map.createFromObjects('Items', 17, {key: 'items', frame: 1});
+        var gumwrappers = map.createFromObjects('Items', 18, {key: 'items', frame: 2});
+        var bottles = map.createFromObjects('Items', 19, {key: 'items', frame: 3});
+        var cans = map.createFromObjects('Items', 20, {key: 'items', frame: 4});
+        var pistachios = map.createFromObjects('Dogs', 183, {key: 'pistachio'});
+        var spots = map.createFromObjects('Dogs', 261, {key: 'spot'});
+        var bears = map.createFromObjects('Dogs', 339, {key: 'bear'});
+        var goodNPCs = map.createFromObjects('Goods', 21, {key: 'goodguy'});
+        var badNPCs = map.createFromObjects('Bads', 102, {key: 'badguy'});
 
         // Collisions (THE SAME FOR EVERY LEVEL)
 
@@ -63,7 +97,7 @@ class levelThreeScene extends Phaser.Scene {
 
         var menuScene = this.scene.get("MENU");
         for (var i = 0; i < menuScene.allDogs.length; i++) {
-            createAnimations(i, this);
+            createDogAnimations(i, this);
         }
         createGoodGuyAnimations(this);
         createBadGuyAnimations(this);
@@ -72,36 +106,46 @@ class levelThreeScene extends Phaser.Scene {
 
         var spawnX = 320;
         var spawnY = 320;
-        this.player = this.physics.add.sprite(spawnX, spawnY, getDog(DOGINDEX)).setDepth(0);
-        this.physics.add.collider(this.player, this.collisionLayer);
-        this.player.body.setCollideWorldBounds(true);
+        createPlayer(this, spawnX, spawnY);
+
+        //var playerContainer = this.add.container(0, 0, [this.player, healthBox, loadingBar]);
 
         // Dog NPC Sprites (THE SAME FOR EVERY LEVEL)
 
         // Remove a loop if that particular sprite type does not exist in this map
         for (var i = 0; i < pistachios.length; i++) {
-            createNPC(pistachios[i], this);
+            var npc = createNPC(pistachios[i], this, 300);
             pistachios[i].destroy();
+            npc.body.setSize(112, 80);
+            this.totalDogs++;
         }
         for (var i = 0; i < spots.length; i++) {
-            createNPC(spots[i], this);
+            var npc = createNPC(spots[i], this, 300);
             spots[i].destroy();
+            npc.body.setSize(112, 80);
+            this.totalDogs++;
         }
         for (var i = 0; i < bears.length; i++) {
-            createNPC(bears[i], this);
+            var npc = createNPC(bears[i], this, 300);
             bears[i].destroy();
+            npc.body.setSize(112, 80);
+            this.totalDogs++;
         }
 
         // Human NPC Sprites (THE SAME FOR EVERY LEVEL)
 
         // Remove a loop if that particular sprite type does not exist in this map
         for (var i = 0; i < goodNPCs.length; i++) {
-            createNPC(goodNPCs[i], this);
+            var npc = createNPC(goodNPCs[i], this, 500);
             goodNPCs[i].destroy();
+            npc.body.setSize(48, 112);
+            this.totalGoodGuys++;
         }
         for (var i = 0; i < badNPCs.length; i++) {
-            createNPC(badNPCs[i], this);
+            var npc = createNPC(badNPCs[i], this, 500);
             badNPCs[i].destroy();
+            npc.body.setSize(48, 112);
+            this.totalBadGuys++;
         }
 
         // Item Sprites (THE SAME FOR EVERY LEVEL)
@@ -119,10 +163,6 @@ class levelThreeScene extends Phaser.Scene {
         this.cameras.main.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
         this.cameras.main.startFollow(this.player);
 
-        // Sounds (THE SAME FOR EVERY LEVEL)
-
-        createSounds(this);
-
         // Timer (THE SAME FOR EVERY LEVEL)
     
         // Timer decreases when reputation is higher, and the opposite when lower
@@ -139,27 +179,43 @@ class levelThreeScene extends Phaser.Scene {
 
         // ALL METHODS THE SAME FOR EVERY LEVEL
 
-        // Listen for pause event
+        // Listen for pause event (if player pauses)
 
         pauseEvent(this);
-
-        // Move player
-
-        updatePlayerMovement(this.player, this);
 
         // Update player animations
 
         updatePlayerFrames(this.player, this);
 
-        // Listen for player Actions
+        // Move player
+
+        updatePlayerMovement(this.player, this);
+
+        // Listen for player actions
 
         updatePlayerActions(this.player, this);
+
+        // Update player health
+
+        updatePlayerHealth(this, this.healthBox, this.healthBar, this.player);
 
         // Move NPCS and listen for NPC actions
 
         for (var i = 0; i < this.npcs.length; i++) {
-            updateNPCMovement(this, this.npcs[i]);
-            updateEnemyActions(this, this.npcs[i]);
+            var npcFile = this.npcs[i];
+            var npc = npcFile.npc;
+            var health = npcFile.health;
+            var maxHealth = npcFile.maxHealth;
+            var healthBox = npcFile.healthBox;
+            var healthBar = npcFile.healthBar;
+            processNPCEscape(this, npcFile);
+            if (health <= 0) {
+                processNPCDeath(npcFile, this);
+                this.npcs.splice(i, 1);
+            }
+            updateNPCMovement(this, npc, npcFile);
+            updateEnemyActions(this, npcFile);
+            updateEnemyHealth(npc, health, maxHealth, healthBox, healthBar);
         }
 
         // Update player reputation
@@ -174,45 +230,90 @@ class levelThreeScene extends Phaser.Scene {
 
         updateTimer(this);
 
-        // Update Volume
-        
-        this.sound.setVolume(SOUNDVOLUME);
-
     }
 
     /******************************************** DIFFERENT FOR EACH LEVEL ********************************************/
 
     createQuests() {
 
-        var questOne = this.add.text(WIDTH - 270, HEIGHT - 550, "• Collect all trash\n(0/50 collected)", {
-            fontFamily: 'Georgia',
+        var questOne = this.add.text(QUESTX + 20, QUESTY + 20, "• Collect all trash (0/" + this.totalItems + " collected)", {
+            fontFamily: FONT,
             fontSize: '28px',
             fill: '#ffffff'
-        }).setDepth(15);
+        }).setDepth(DEPTH.OVERLAYTEXT);
         questOne.setScrollFactor(0);
         questOne.setStroke('black', 3);
-        questOne.setOrigin(0.5);
-        this.quests.push(questOne);
+        questOne.setWordWrapWidth(WORDWRAPWIDTH);
+        this.quests.push({
+            questText: questOne,
+            questStatus: "INCOMPLETE"
+        });
+
+        var questTwo = this.add.text(QUESTX + 20, QUESTY + 100, "• Get rid of the bad guys (0/" + this.totalBadGuys + " gone)", {
+            fontFamily: FONT,
+            fontSize: '28px',
+            fill: '#ffffff'
+        }).setDepth(DEPTH.OVERLAYTEXT);
+        questTwo.setScrollFactor(0);
+        questTwo.setStroke('black', 3);
+        questTwo.setWordWrapWidth(WORDWRAPWIDTH);
+        this.quests.push({
+            questText: questTwo,
+            questStatus: "INCOMPLETE"
+        });
 
     }
 
     updateQuest() {
 
-        if (this.quests.length == 0) {
+        if (this.quests.length == this.questsCompleted) {
             winLevel(this);
         }
 
         for (var i = 0; i < this.quests.length; i++) {
 
+            var questText = this.quests[i].questText;
+            var questStatus = this.quests[i].questStatus;
+
             if (i == 0) {
                 var itemsCollected = this.totalItems - this.items.length;
-                this.quests[i].setText("• Collect all trash\n(" + itemsCollected + "/50 collected)");
+                questText.setText("• Collect all trash (" + itemsCollected + "/" + this.totalItems + " collected)");
                 if (itemsCollected == this.totalItems) {
-                    this.quests[i].setFill("#7CFC00");
-                    this.sound.play('questSound');
-                    this.quests.splice(i, 1);
-                    changeReputation(20);
-                    break;
+                    if (questStatus == "INCOMPLETE") {
+                        this.quests[i].questStatus = "COMPLETE";
+                        questText.setFill(GOODQUESTFILL);
+                        this.sound.play('questSound', {
+                            volume: SOUNDVOLUME
+                        });
+                        this.questsCompleted++;
+                        changeReputation(20);
+                        break;
+                    }
+                    
+                }
+            }
+
+            else if (i == 1) {
+                var badGuysRemaining = 0;
+                for (var j = 0; j < this.npcs.length; j++) {
+                    var npc = this.npcs[j].npc;
+                    if (npc.texture.key == "badguy") {
+                        badGuysRemaining++;
+                    }
+                }
+                var badGuysGone = this.totalBadGuys - badGuysRemaining;
+                questText.setText("• Get rid of the bad guys (" + badGuysGone + "/" + this.totalBadGuys + " gone)");
+                if (badGuysGone == this.totalBadGuys) {
+                    if (questStatus == "INCOMPLETE") {
+                        this.quests[i].questStatus = "COMPLETE";
+                        questText.setFill(GOODQUESTFILL);
+                        this.sound.play('questSound', {
+                            volume: SOUNDVOLUME
+                        });
+                        this.questsCompleted++;
+                        changeReputation(20);
+                        break;
+                    }
                 }
             }
 

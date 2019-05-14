@@ -49,7 +49,7 @@ class levelFourScene extends Phaser.Scene {
 
         progress.NEW = false;
         progress.CURRENTLEVEL = "LEVELFOUR" 
-        progress.CURRENTLEVELINDEX = 0;
+        progress.CURRENTLEVELINDEX = 3;
 
         // Set variables (SAME FOR EVERY LEVEL; ACTUAL VALUES CHANGE BASED ON CURRENT REPUTATION)
 
