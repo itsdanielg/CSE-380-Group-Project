@@ -20,35 +20,6 @@ class levelOneScene extends Phaser.Scene {
 
     create() {
 
-<<<<<<< HEAD
-        // Tilemap
-        var map = this.make.tilemap({ key: 'benchmark2Map' });
-        var sidewalkTile = map.addTilesetImage("sidewalk", 'sidewalk');
-        var streetHoriztonalTile = map.addTilesetImage("street_horiz", 'streetHorizontal');
-        var streetIntersectionTile = map.addTilesetImage("street_intersection", 'streetIntersection');
-        var streetVerticalTile = map.addTilesetImage("street_vertical", 'streetVertical');
-        var buildingTile = map.addTilesetImage("building", 'building');
-        var tileset = [sidewalkTile, streetHoriztonalTile, streetIntersectionTile, streetVerticalTile];
-        var backgroundLayer = map.createStaticLayer("Background", tileset, 0, 0).setDepth(-1);
-        var collisionLayer = map.createStaticLayer("Collision", buildingTile, 0, 0);
-        // this.impassable = [];
-        // for(var i = 0; i < map.layers[1].data.length; i++) {
-        //     for (var j = 0; j < map.layers[1].data[0].length; j++) {
-        //         if (map.layers[1].data[i][j].index != -1) {
-        //             console.log(map.layers[1].data[i][j]);
-        //             var wall = this.physics.add.sprite(j * 128 + 16, i * 128 + 16);
-        //             wall.setOrigin(-1, -1);
-        //             wall.setSize(128, 128);
-        //             wall.body.immovable = true;
-        //             this.impassable.push(wall);
-        //         }
-        //     }
-        // }
-
-        // Collisions
-        collisionLayer.setCollisionByProperty({collides:true});
-        collisionLayer.setCollisionBetween(4, 8);
-=======
         // Reset Level
 
         this.npcs.length = 0;
@@ -99,7 +70,6 @@ class levelOneScene extends Phaser.Scene {
         // Collisions (THE SAME FOR EVERY LEVEL)
 
         this.collisionLayer.setCollisionByProperty({collides:true});
->>>>>>> 27404a5360f74c1d008e15ca7aba351363eefc8a
         this.physics.world.setBounds(0, 0, map.widthInPixels, map.heightInPixels);
 
         // Sprite Animations (THE SAME FOR EVERY LEVEL)
@@ -113,71 +83,29 @@ class levelOneScene extends Phaser.Scene {
 
         // Player Sprite (THE SAME FOR EVERY LEVEL EXCEPT FOR SPAWN LOCATION)
 
-<<<<<<< HEAD
-        this.dogIndex = menuScene.dogIndex;
-        this.player = this.physics.add.sprite(320, 320, 'dogs');
-        // this.physics.add.collider(this.player, this.impassable);
-        this.physics.add.collider(this.player, collisionLayer);
-        this.player.body.setCollideWorldBounds(true);
-        // this.player.body.setCircle(50, this.player.displayWidth / 2 - 50, this.player.displayHeight / 2 - 55);
-        this.player.setSize(80, 70);
-=======
         var spawnX = 320;
         var spawnY = 320;
         createPlayer(this, spawnX, spawnY);
->>>>>>> 27404a5360f74c1d008e15ca7aba351363eefc8a
 
         //var playerContainer = this.add.container(0, 0, [this.player, healthBox, loadingBar]);
 
         // Dog NPC Sprites (THE SAME FOR EVERY LEVEL)
 
-<<<<<<< HEAD
-        for (var i = 0; i < 20; i++) {
-            var randomDogIndex = Math.floor((Math.random() * 3));
-            var xPos = Math.floor((Math.random() * map.widthInPixels));
-            while (xPos < 64 || xPos > map.widthInPixels - 64) {
-                xPos = Math.floor((Math.random() * map.widthInPixels));
-            }
-            var yPos = Math.floor((Math.random() * map.heightInPixels));
-            while (yPos < 64 || yPos > map.heightInPixels - 64) {
-                yPos = Math.floor((Math.random() * map.heightInPixels));
-            }
-            var npc = this.physics.add.sprite(xPos, yPos, 'dogs');
-            npc.anims.play(randomDogIndex + 'moveDown', true);
-            this.physics.add.collider(npc, this.player);
-            this.physics.add.collider(npc, collisionLayer);
-            npc.body.setCollideWorldBounds(true);
-            npc.setImmovable();
-            npc.setSize(40, 70);
-            // npc.body.setCircle(50, this.player.displayWidth / 2 - 50, this.player.displayHeight / 2 - 55);
-            if (this.physics.collide(npc, this.npcs)) {
-                console.log("COLLIDED WITH ANOTHER SPRITE");
-            }
-            else if (this.physics.collide(npc, this.player)) {
-                console.log("COLLIDED WITH PLAYER");
-            }
-            else if (this.physics.overlap(npc, buildingTile)) {
-                console.log("COLLIDED WITH BUILDING");
-            }
-            this.npcs.push(npc);
-            
-=======
         // Remove a loop if that particular sprite type does not exist in this map
         for (var i = 0; i < pistachios.length; i++) {
             var npc = createNPC(pistachios[i], this, 300);
             pistachios[i].destroy();
-            npc.body.setSize(112, 80);
+            npc.body.setSize(80, 70);
         }
         for (var i = 0; i < spots.length; i++) {
             var npc = createNPC(spots[i], this, 300);
             spots[i].destroy();
-            npc.body.setSize(112, 80);
+            npc.body.setSize(80, 70);
         }
         for (var i = 0; i < bears.length; i++) {
             var npc = createNPC(bears[i], this, 300);
             bears[i].destroy();
-            npc.body.setSize(112, 80);
->>>>>>> 27404a5360f74c1d008e15ca7aba351363eefc8a
+            npc.body.setSize(80, 70);
         }
 
         // Human NPC Sprites (THE SAME FOR EVERY LEVEL)
@@ -308,47 +236,12 @@ class levelOneScene extends Phaser.Scene {
         });
 
     }
-<<<<<<< HEAD
-    
-    updatePlayerMovement() {
-        this.xVel = 0;
-        this.yVel = 0;
-    
-        if (this.input.keyboard.addKey('A').isDown) {
-            this.xVel -= 1;
-        }
-        if (this.input.keyboard.addKey('D').isDown) {
-            this.xVel += 1;
-        }
-        if (this.input.keyboard.addKey('W').isDown) {
-            this.yVel -= 1;
-        }
-        if (this.input.keyboard.addKey('S').isDown) {
-            this.yVel += 1;
-        }
-
-        var normalise = Math.sqrt(this.yVel * this.yVel + this.xVel * this.xVel);
-        if(normalise != 0) {
-            if (this.input.keyboard.addKey('SHIFT').isDown) {
-                this.player.body.setVelocityX(this.xVel / normalise * 1.9 * VELOCITY);
-                this.player.body.setVelocityY(this.yVel / normalise * 1.9 * VELOCITY);
-            } else {
-                this.player.body.setVelocityX(this.xVel / normalise * VELOCITY);
-                this.player.body.setVelocityY(this.yVel / normalise * VELOCITY);
-            }
-        } else {
-            this.player.body.setVelocityX(0);
-            this.player.body.setVelocityY(0);
-        }
-    }
-=======
 
     updateQuest() {
 
         if (this.quests.length == this.questsCompleted) {
             winLevel(this);
         }
->>>>>>> 27404a5360f74c1d008e15ca7aba351363eefc8a
 
         for (var i = 0; i < this.quests.length; i++) {
 
