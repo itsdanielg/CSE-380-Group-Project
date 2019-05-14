@@ -8,6 +8,10 @@
     ],
     "rewrites": [
       {
+        "source": "**",
+        "destination": "/final/index.html"
+      },
+      {
         "source": "/benchmark1",
         "destination": "/final/gdd.html"
       },
@@ -18,10 +22,6 @@
       {
         "source": "/benchmark3",
         "destination": "/benchmark3/index.html"
-      },
-      {
-        "source": "**",
-        "destination": "/final/index.html"
       }
     ]
   }
