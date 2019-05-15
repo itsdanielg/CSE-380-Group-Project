@@ -105,8 +105,8 @@ class levelTwoScene extends Phaser.Scene {
 
         // Player Sprite (THE SAME FOR EVERY LEVEL EXCEPT FOR SPAWN LOCATION)
 
-        var spawnX = 320;
-        var spawnY = 320;
+        var spawnX = 620;
+        var spawnY = 80;
         createPlayer(this, spawnX, spawnY);
 
         //var playerContainer = this.add.container(0, 0, [this.player, healthBox, loadingBar]);
@@ -250,7 +250,7 @@ class levelTwoScene extends Phaser.Scene {
             questStatus: "INCOMPLETE"
         });
 
-        var questTwo = this.add.text(QUESTX + 20, QUESTY + 100, "• Get rid of the bad guys (0/" + this.totalBadGuys + " gone)", {
+        var questTwo = this.add.text(QUESTX + 20, QUESTY + 100, "• Defeat Littering Larry (0/" + this.totalBadGuys + " gone)", {
             fontFamily: FONT,
             fontSize: '28px',
             fill: '#ffffff'
@@ -303,7 +303,7 @@ class levelTwoScene extends Phaser.Scene {
                     }
                 }
                 var badGuysGone = this.totalBadGuys - badGuysRemaining;
-                questText.setText("• Get rid of the bad guys (" + badGuysGone + "/" + this.totalBadGuys + " gone)");
+                questText.setText("• Defeat Littering Larry (" + badGuysGone + "/" + this.totalBadGuys + " gone)");
                 if (badGuysGone == this.totalBadGuys) {
                     if (questStatus == "INCOMPLETE") {
                         this.quests[i].questStatus = "COMPLETE";
