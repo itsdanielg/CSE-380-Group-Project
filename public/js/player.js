@@ -117,7 +117,7 @@ function updatePlayerHealth(scene, healthBox, healthBar, player) {
     if (PLAYERHEALTH >= BASEPLAYERHEALTH) {
         PLAYERHEALTH = BASEPLAYERHEALTH;
     }
-    var health = (PLAYERHEALTH / 500) * 128;
+    var health = (PLAYERHEALTH / BASEPLAYERHEALTH) * 128;
     healthBar.clear();
     healthBar.fillStyle(0x008000);
     healthBar.fillRect(-64, -80, health, 20);

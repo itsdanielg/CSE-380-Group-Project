@@ -345,7 +345,7 @@ function processNPCDeath(npcFile, scene) {
             npc.destroy();
             healthBox.destroy();
             healthBar.destroy();
-            progress.REPUTATION += 10;
+            changeReputation(10);
             scene.badNPCsLength--;
         }, scene);
     }
@@ -358,7 +358,7 @@ function processNPCDeath(npcFile, scene) {
             npc.destroy();
             healthBox.destroy();
             healthBar.destroy();
-            progress.REPUTATION -= 5;
+            changeReputation(-5);
         }, scene);
     }
     else if (npc.texture.key == 'spot') {
@@ -370,7 +370,7 @@ function processNPCDeath(npcFile, scene) {
             npc.destroy();
             healthBox.destroy();
             healthBar.destroy();
-            progress.REPUTATION -= 5;
+            changeReputation(-5);
         }, scene);
     }
     else if (npc.texture.key == 'bear') {
@@ -382,7 +382,7 @@ function processNPCDeath(npcFile, scene) {
             npc.destroy();
             healthBox.destroy();
             healthBar.destroy();
-            progress.REPUTATION -= 5;
+            changeReputation(-5);
         }, scene);
     }
     else {
@@ -394,7 +394,7 @@ function processNPCDeath(npcFile, scene) {
             npc.destroy();
             healthBox.destroy();
             healthBar.destroy();
-            progress.REPUTATION -= 10;
+            changeReputation(-10);
         }, scene);
     }
 
