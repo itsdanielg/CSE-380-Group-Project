@@ -1,7 +1,6 @@
 function pauseEvent(scene) {
 
-    if (scene.input.keyboard.addKey('ESC').isDown) {
-        scene.input.keyboard.removeKey('ESC');
+    if (Phaser.Input.Keyboard.JustDown((scene.input.keyboard.addKey('ESC')))) {
         scene.scene.launch("PAUSE");
         scene.scene.pause();
         scene.scene.bringToTop("PAUSE");
