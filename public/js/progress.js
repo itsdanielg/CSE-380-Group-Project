@@ -273,6 +273,86 @@ function createBadGuyAnimations(scene) {
     });
 }
 
+function resetAnims(scene) {
+    scene.anims.remove('0moveDownIdle')
+    scene.anims.remove('0moveDown')
+    scene.anims.remove('0moveUpIdle')
+    scene.anims.remove('0moveUp')
+    scene.anims.remove('0moveLeftIdle')
+    scene.anims.remove('0moveLeft')
+    scene.anims.remove('0moveRightIdle')
+    scene.anims.remove('0moveRight')
+    scene.anims.remove('0attackDown')
+    scene.anims.remove('0attackUp')
+    scene.anims.remove('0attackLeft')
+    scene.anims.remove('0attackRight')
+    scene.anims.remove('0barkDown')
+    scene.anims.remove('0barkUp')
+    scene.anims.remove('0barkLeft')
+    scene.anims.remove('0barkRight')
+    scene.anims.remove('0dying')
+    scene.anims.remove('1moveDownIdle')
+    scene.anims.remove('1moveDown')
+    scene.anims.remove('1moveUpIdle')
+    scene.anims.remove('1moveUp')
+    scene.anims.remove('1moveLeftIdle')
+    scene.anims.remove('1moveLeft')
+    scene.anims.remove('1moveRightIdle')
+    scene.anims.remove('1moveRight')
+    scene.anims.remove('1attackDown')
+    scene.anims.remove('1attackUp')
+    scene.anims.remove('1attackLeft')
+    scene.anims.remove('1attackRight')
+    scene.anims.remove('1barkDown')
+    scene.anims.remove('1barkUp')
+    scene.anims.remove('1barkLeft')
+    scene.anims.remove('1barkRight')
+    scene.anims.remove('1dying')
+    scene.anims.remove('2moveDownIdle')
+    scene.anims.remove('2moveDown')
+    scene.anims.remove('2moveUpIdle')
+    scene.anims.remove('2moveUp')
+    scene.anims.remove('2moveLeftIdle')
+    scene.anims.remove('2moveLeft')
+    scene.anims.remove('2moveRightIdle')
+    scene.anims.remove('2moveRight')
+    scene.anims.remove('2attackDown')
+    scene.anims.remove('2attackUp')
+    scene.anims.remove('2attackLeft')
+    scene.anims.remove('2attackRight')
+    scene.anims.remove('2barkDown')
+    scene.anims.remove('2barkUp')
+    scene.anims.remove('2barkLeft')
+    scene.anims.remove('2barkRight')
+    scene.anims.remove('2dying')
+    scene.anims.remove('ggMoveDownIdle');
+    scene.anims.remove('ggMoveDown');
+    scene.anims.remove('ggMoveUpIdle');
+    scene.anims.remove('ggMoveUp');
+    scene.anims.remove('ggMoveLeftIdle');
+    scene.anims.remove('ggMoveLeft');
+    scene.anims.remove('ggMoveRightIdle');
+    scene.anims.remove('ggMoveRight');
+    scene.anims.remove('ggAttackDown');
+    scene.anims.remove('ggAttackUp');
+    scene.anims.remove('ggAttackLeft');
+    scene.anims.remove('ggAttackRight');
+    scene.anims.remove('ggDying');
+    scene.anims.remove('bgMoveDownIdle');
+    scene.anims.remove('bgMoveDown');
+    scene.anims.remove('bgMoveUpIdle');
+    scene.anims.remove('bgMoveUp');
+    scene.anims.remove('bgMoveLeftIdle');
+    scene.anims.remove('bgMoveLeft');
+    scene.anims.remove('bgMoveRightIdle');
+    scene.anims.remove('bgMoveRight');
+    scene.anims.remove('bgAttackDown');
+    scene.anims.remove('bgAttackUp');
+    scene.anims.remove('bgAttackLeft');
+    scene.anims.remove('bgAttackRight');
+    scene.anims.remove('bgDying');
+}
+
 function createLevelOverlay(scene) {
 
     // Text

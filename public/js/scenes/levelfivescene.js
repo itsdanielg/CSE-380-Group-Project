@@ -95,6 +95,7 @@ class levelFiveScene extends Phaser.Scene {
 
         // Sprite Animations (THE SAME FOR EVERY LEVEL)
 
+        resetAnims(this);
         var menuScene = this.scene.get("MENU");
         for (var i = 0; i < menuScene.allDogs.length; i++) {
             createDogAnimations(i, this);
