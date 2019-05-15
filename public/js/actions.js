@@ -1,7 +1,6 @@
 function pauseEvent(scene) {
 
-    if (scene.input.keyboard.addKey('ESC').isDown) {
-        scene.input.keyboard.removeKey('ESC');
+    if (Phaser.Input.Keyboard.JustDown((scene.input.keyboard.addKey('ESC')))) {
         scene.scene.launch("PAUSE");
         scene.scene.pause();
         scene.scene.bringToTop("PAUSE");
@@ -15,33 +14,36 @@ function attackEvent(scene, player, npc, event) {
         npc.health -= PLAYERDAMAGE;
     }
     else {
-        if (!INVINCIBLE) {
-            if (npc.texture.key == 'badguy') {
+        if (npc.texture.key == 'badguy') {
+            if (!INVINCIBLE) {
                 PLAYERHEALTH -= HUMANDAMAGE;
-                scene.sound.play('humanPunchSound', {
-                    volume: SOUNDVOLUME,
-                    detune: -300
-                });
             }
-            else if (npc.texture.key == 'goodguy') {
-                PLAYERHEALTH -= (HUMANDAMAGE + 30);
-                scene.sound.play('humanPunchSound', {
-                    volume: SOUNDVOLUME,
-                    detune: -300
-                });
-            }
-            else {
-                PLAYERHEALTH -= DOGDAMAGE;
-                scene.sound.play('dogAttackSound', {
-                    volume: SOUNDVOLUME,
-                    detune: 400
-                });
-            }
-            scene.sound.play('dogDamagedSound', {
-                volume: SOUNDVOLUME
+            scene.sound.play('humanPunchSound', {
+                volume: SOUNDVOLUME,
+                detune: -300
             });
         }
-        
+        else if (npc.texture.key == 'goodguy') {
+            if (!INVINCIBLE) {
+                PLAYERHEALTH -= (HUMANDAMAGE + 30);
+            }
+            scene.sound.play('humanPunchSound', {
+                volume: SOUNDVOLUME,
+                detune: -300
+            });
+        }
+        else {
+            if (!INVINCIBLE) {
+                PLAYERHEALTH -= DOGDAMAGE;
+            }
+            scene.sound.play('dogAttackSound', {
+                volume: SOUNDVOLUME,
+                detune: 400
+            });
+        }
+        scene.sound.play('dogDamagedSound', {
+            volume: SOUNDVOLUME
+        });
     }
 
 }

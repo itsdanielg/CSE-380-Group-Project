@@ -146,8 +146,7 @@ class pauseScene extends Phaser.Scene {
 
     update() {
 
-        if (this.input.keyboard.addKey('ESC').isDown) {
-            this.input.keyboard.removeKey('ESC');
+        if (Phaser.Input.Keyboard.JustDown((this.input.keyboard.addKey('ESC')))) {
             this.scene.stop();
             this.scene.resume(progress.CURRENTLEVEL);
         }

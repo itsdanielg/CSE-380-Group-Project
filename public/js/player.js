@@ -5,6 +5,7 @@ var PLAYERHEALTH = BASEPLAYERHEALTH;
 var LASTKEY = 3;
 var ANIMATIONPLAYING = false;
 var ITEMSCANCOLLECT = [0, 1, 2, 3, 4]
+var KEYPRESSED = "";
 
 function createPlayer(scene, spawnX, spawnY) {
 
@@ -117,7 +118,7 @@ function updatePlayerHealth(scene, healthBox, healthBar, player) {
     if (PLAYERHEALTH >= BASEPLAYERHEALTH) {
         PLAYERHEALTH = BASEPLAYERHEALTH;
     }
-    var health = (PLAYERHEALTH / 500) * 128;
+    var health = (PLAYERHEALTH / BASEPLAYERHEALTH) * 128;
     healthBar.clear();
     healthBar.fillStyle(0x008000);
     healthBar.fillRect(-64, -80, health, 20);
@@ -130,8 +131,8 @@ function updatePlayerHealth(scene, healthBox, healthBar, player) {
 
 function updatePlayerActions(player, scene) {
 
-    if (scene.input.keyboard.addKey('J').isDown) {
-        scene.input.keyboard.removeKey('J');
+    
+    if (Phaser.Input.Keyboard.JustDown((scene.input.keyboard.addKey('J')))) {
         scene.sound.play('dogAttackSound', {
             volume: SOUNDVOLUME
         });
@@ -163,8 +164,7 @@ function updatePlayerActions(player, scene) {
         }
     }
 
-    if (scene.input.keyboard.addKey('K').isDown) {
-        scene.input.keyboard.removeKey('K');
+    if (Phaser.Input.Keyboard.JustDown((scene.input.keyboard.addKey('K')))) {
         var playerBounds = player.getBounds();
         for (var i = 0; i < scene.items.length; i++) {
             var item = scene.items[i];
@@ -186,8 +186,7 @@ function updatePlayerActions(player, scene) {
         
     }
 
-    if (scene.input.keyboard.addKey('L').isDown) {
-        scene.input.keyboard.removeKey('L');
+    if (Phaser.Input.Keyboard.JustDown((scene.input.keyboard.addKey('L')))) {
         scene.sound.play('dogBarkSound', {
             volume: SOUNDVOLUME
         });
