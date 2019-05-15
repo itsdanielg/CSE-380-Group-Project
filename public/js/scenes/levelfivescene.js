@@ -57,6 +57,7 @@ class levelFiveScene extends Phaser.Scene {
         HUMANDAMAGE = BASEHUMANDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
         DOGDAMAGE = BASEDOGDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
         ENEMYATTACKSPEED = BASEATTACKSPEED + Math.ceil(progress.REPUTATION * 0.01);
+        ENEMYATTACKFRAMERATE = (ANIMATION_FRAME_RATE + 10) * ENEMYATTACKSPEED;
         ITEMSCANCOLLECT = [0]
 
         // Overlay (THE SAME FOR EVERY LEVEL)
@@ -94,6 +95,7 @@ class levelFiveScene extends Phaser.Scene {
 
         // Sprite Animations (THE SAME FOR EVERY LEVEL)
 
+        resetAnims(this);
         var menuScene = this.scene.get("MENU");
         for (var i = 0; i < menuScene.allDogs.length; i++) {
             createDogAnimations(i, this);
