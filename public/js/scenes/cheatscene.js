@@ -16,6 +16,8 @@ class cheatScene extends Phaser.Scene {
         this.message = ""
         this.text = null;
         this.nextLevel = "";
+        this.invincible = INVINCIBLE;
+        this.reputation = progress.REPUTATION;
 
         // Add images/buttons
 
@@ -54,7 +56,7 @@ class cheatScene extends Phaser.Scene {
         })
         submitButton.on("pointerup", () => {
             INVINCIBLE = this.invincible;
-            progress.REPUTATION = this.reputation;
+            changeReputation(this.reputation);
             if (this.nextLevel != "") {
                 this.scene.stop("PAUSE");
                 this.scene.stop(progress.CURRENTLEVEL);
