@@ -56,7 +56,6 @@ class cheatScene extends Phaser.Scene {
         })
         submitButton.on("pointerup", () => {
             INVINCIBLE = this.invincible;
-            changeReputation(this.reputation);
             if (this.nextLevel != "") {
                 this.scene.stop("PAUSE");
                 this.scene.stop(progress.CURRENTLEVEL);
@@ -123,9 +122,9 @@ class cheatScene extends Phaser.Scene {
 
         if (this.input.keyboard.addKey('Q').isDown) {
             this.input.keyboard.removeKey('Q');
-            this.reputation += 5;
-            if (this.reputation < MAXREPUTATION) {
-                this.message = "Reputation increased!";
+            changeReputation(5);
+            if (progress.REPUTATION < MAXREPUTATION) {
+                this.message = "Reputation increased!(" + progress.REPUTATION + ")";
             }
             else {
                 this.message = "Max reputation reached!";
@@ -134,9 +133,9 @@ class cheatScene extends Phaser.Scene {
 
         if (this.input.keyboard.addKey('E').isDown) {
             this.input.keyboard.removeKey('E');
-            this.reputation -= 5;
-            if (this.reputation > MINREPUTATION) {
-                this.message = "Reputation decreased!";
+            changeReputation(-5);
+            if (progress.REPUTATION > MINREPUTATION) {
+                this.message = "Reputation decreased!(" + progress.REPUTATION + ")";
             }
             else {
                 this.message = "Min reputation reached!";
