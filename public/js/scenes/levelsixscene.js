@@ -58,7 +58,7 @@ class levelSixScene extends Phaser.Scene {
         DOGDAMAGE = BASEDOGDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
         ENEMYATTACKSPEED = BASEATTACKSPEED + Math.ceil(progress.REPUTATION * 0.01);
         ENEMYATTACKFRAMERATE = (ANIMATION_FRAME_RATE + 10) * ENEMYATTACKSPEED;
-        ITEMSCANCOLLECT = [0]
+        ITEMSCANCOLLECT = [0, 1, 2, 3, 4]
 
         // Overlay (THE SAME FOR EVERY LEVEL)
 
@@ -104,8 +104,8 @@ class levelSixScene extends Phaser.Scene {
 
         // Player Sprite (THE SAME FOR EVERY LEVEL EXCEPT FOR SPAWN LOCATION)
 
-        var spawnX = 320;
-        var spawnY = 640;
+        var spawnX = 1350;
+        var spawnY = 780;
         createPlayer(this, spawnX, spawnY);
 
         //var playerContainer = this.add.container(0, 0, [this.player, healthBox, loadingBar]);

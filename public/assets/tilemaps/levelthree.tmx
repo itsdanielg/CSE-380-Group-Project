@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<map version="1.2" tiledversion="1.2.3" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="128" tileheight="128" infinite="0" nextlayerid="10" nextobjectid="196">
+<map version="1.0" orientation="orthogonal" renderorder="right-down" width="30" height="30" tilewidth="128" tileheight="128" nextobjectid="196">
  <tileset firstgid="1" name="citytileset" tilewidth="128" tileheight="128" tilecount="15" columns="5">
   <image source="../spritesheets/tilespritesheet.png" width="640" height="384"/>
   <tile id="3">
@@ -41,7 +41,7 @@
  <tileset firstgid="339" name="bear" tilewidth="128" tileheight="128" tilecount="78" columns="6">
   <image source="../spritesheets/bearspritesheet.png" width="768" height="1664"/>
  </tileset>
- <layer id="1" name="Background" width="30" height="30">
+ <layer name="Background" width="30" height="30">
   <data encoding="csv">
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,
 3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,3,2,2,1,
@@ -75,7 +75,7 @@
 1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,1,8,8,1
 </data>
  </layer>
- <layer id="3" name="Collision" width="30" height="30">
+ <layer name="Collision" width="30" height="30">
   <data encoding="csv">
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
 0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,0,
@@ -109,7 +109,7 @@
 9,10,9,10,9,10,9,10,9,10,9,10,9,10,9,10,9,10,9,10,9,10,9,10,9,10,0,0,0,0
 </data>
  </layer>
- <objectgroup id="5" name="Items">
+ <objectgroup name="Items">
   <object id="164" gid="16" x="756" y="160" width="64" height="64"/>
   <object id="165" gid="16" x="2248" y="1800" width="64" height="64"/>
   <object id="166" gid="17" x="2668" y="1036" width="64" height="64"/>
@@ -121,7 +121,7 @@
   <object id="172" gid="20" x="3580" y="3436" width="64" height="64"/>
   <object id="173" gid="20" x="1388" y="1832" width="64" height="64"/>
  </objectgroup>
- <objectgroup id="6" name="Dogs">
+ <objectgroup name="Dogs">
   <object id="174" gid="339" x="1512" y="312" width="128" height="128"/>
   <object id="175" gid="339" x="1908" y="1908" width="128" height="128"/>
   <object id="176" gid="183" x="1516" y="2712" width="128" height="128"/>
@@ -129,14 +129,14 @@
   <object id="178" gid="261" x="3120" y="3420" width="128" height="128"/>
   <object id="179" gid="261" x="1032" y="1148" width="128" height="128"/>
  </objectgroup>
- <objectgroup id="8" name="Goods">
+ <objectgroup name="Goods">
   <object id="191" gid="21" x="2448" y="3420" width="128" height="128"/>
   <object id="192" gid="21" x="664" y="2592" width="128" height="128"/>
   <object id="193" gid="21" x="3452" y="1884" width="128" height="128"/>
   <object id="194" gid="21" x="2472" y="1116" width="128" height="128"/>
   <object id="195" gid="21" x="572" y="336" width="128" height="128"/>
  </objectgroup>
- <objectgroup id="9" name="Bads">
+ <objectgroup name="Bads">
   <object id="188" gid="102" x="1288" y="456" width="128" height="128"/>
   <object id="189" gid="102" x="2552" y="1896" width="128" height="128"/>
   <object id="190" gid="102" x="3452" y="3600" width="128" height="128"/>

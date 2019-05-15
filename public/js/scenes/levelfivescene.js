@@ -58,7 +58,7 @@ class levelFiveScene extends Phaser.Scene {
         DOGDAMAGE = BASEDOGDAMAGE + Math.ceil(progress.REPUTATION * 0.4);
         ENEMYATTACKSPEED = BASEATTACKSPEED + Math.ceil(progress.REPUTATION * 0.01);
         ENEMYATTACKFRAMERATE = (ANIMATION_FRAME_RATE + 10) * ENEMYATTACKSPEED;
-        ITEMSCANCOLLECT = [0]
+        ITEMSCANCOLLECT = [0, 1, 2, 3, 4]
 
         // Overlay (THE SAME FOR EVERY LEVEL)
 
