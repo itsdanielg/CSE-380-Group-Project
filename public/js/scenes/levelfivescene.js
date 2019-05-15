@@ -376,7 +376,6 @@ class levelFiveScene extends Phaser.Scene {
                         });
                         this.questsCompleted++;
                         changeReputation(10);
-                        ITEMSCANCOLLECT = [1];
                         break;
                     }
                 }
@@ -397,7 +396,6 @@ class levelFiveScene extends Phaser.Scene {
                         });
                         this.questsCompleted++;
                         changeReputation(10);
-                        ITEMSCANCOLLECT = [2];
                         break;
                     }
                 }
@@ -418,7 +416,6 @@ class levelFiveScene extends Phaser.Scene {
                         });
                         this.questsCompleted++;
                         changeReputation(10);
-                        ITEMSCANCOLLECT = [3];
                         break;
                     }
                 }
@@ -439,7 +436,6 @@ class levelFiveScene extends Phaser.Scene {
                         });
                         this.questsCompleted++;
                         changeReputation(10);
-                        ITEMSCANCOLLECT = [4];
                         break;
                     }
                 }
